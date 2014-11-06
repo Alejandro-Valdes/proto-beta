@@ -16,6 +16,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 
 public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
@@ -25,19 +26,28 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
     private Graphics graGraficaApplet;  // Objeto grafico de la Imagen
     private boolean bPausado;       //pausa
 
-    //Objeto de la clase Personae para el manejo de la animación
+    //Objeto de la clase Animacion para el manejo de la animación
     private Animacion animChickenRun;
     private Animacion animChickenAttack;
     private Animacion animChickenStand;
     private Animacion animHeroRun;
     private Animacion animHeroStand;
-    private Animacion animHeroJump;
-
-        
+    private Animacion animHeroJump;    
 	
     //Variables de control de tiempo de la animación
     private long tiempoActual;
-    int posX, posY;
+    /*
+    Variable para controlar backgrounds
+    0-Loading
+    1-Main
+    2-LevelSelect 
+    3-Tutorial
+    4-Level 1
+    */
+    private int iBackground;
+    
+    //arreglo de backgrounds
+    private ArrayList arlBackgrounds;
     
     public Prototipo_Alfa(){
         init();
@@ -55,7 +65,8 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
         // hago el applet de un tamaño 500,500
         setSize(1600, 600);
 
-        
+        //empiezo en main
+        iBackground = 0;
         //Creo imagenes de gallina stand y las agrego a la animacion
         Image imaChickenStand1 = Toolkit.getDefaultToolkit().getImage(
                 this.getClass().getResource("gallina_zombie_stand_01.png"));
@@ -338,6 +349,45 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
         animHeroJump.sumaCuadro(imaHeroJump19, 50);
         animHeroJump.sumaCuadro(imaHeroJump20, 50);
         animHeroJump.sumaCuadro(imaHeroJump21, 50);
+        
+        //lleno el arraylist con imagenes de fondo
+        arlBackgrounds = new ArrayList();
+        
+        //creo imagen load
+        URL urlImageLoad = 
+                this.getClass().getResource("background_loading.jpg");
+        Image imaImagenLoad = Toolkit.getDefaultToolkit()
+                .getImage(urlImageLoad);
+        
+        arlBackgrounds.add(imaImagenLoad);
+        
+        // creo imagen Main
+        URL urlImagenMain = 
+                this.getClass().getResource("background_main.jpg");
+        Image imaImagenMain = Toolkit.getDefaultToolkit()
+                                           .getImage(urlImagenMain);
+        arlBackgrounds.add(imaImagenMain);
+        
+        // creo imagen LevelSelect
+        URL urlImagenLevelSelect = 
+                this.getClass().getResource("background_levelselect.jpg");
+        Image imaImagenLevelSelect = Toolkit.getDefaultToolkit()
+                                           .getImage(urlImagenLevelSelect);
+        arlBackgrounds.add(imaImagenLevelSelect);
+        
+        // creo imagen tutorial
+        URL urlImagenTutorial = 
+                this.getClass().getResource("background_tutorial.jpg");
+        Image imaImagenTutorial= Toolkit.getDefaultToolkit()
+                                           .getImage(urlImagenTutorial);
+        arlBackgrounds.add(imaImagenTutorial);
+        
+        // creo imagen LevelSelect
+        URL urlImagenLevel1 = 
+                this.getClass().getResource("background_level1.jpg");
+        Image imaImagenLevel1 = Toolkit.getDefaultToolkit()
+                                           .getImage(urlImagenLevel1);
+        arlBackgrounds.add(imaImagenLevel1);
 
  
         // se define el background en color blanco
@@ -449,16 +499,12 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
                         this.getSize().height);
                 graGraficaApplet = imaImagenApplet.getGraphics ();
         }
-        
-        // creo imagen para el background
-        URL urlImagenBackground = 
-                this.getClass().getResource("background_level1.jpg");
-        Image imaImagenBackground = Toolkit.getDefaultToolkit()
-                                           .getImage(urlImagenBackground);
 
-        // Despliego la imagen
-        graGraficaApplet.drawImage(imaImagenBackground, 0, 0, 
-                getWidth(), getHeight(), this);
+        // Despliego la imagen correspondiente
+        if(iBackground < 5) {
+            graGraficaApplet.drawImage((Image) arlBackgrounds.
+                get(iBackground), 0, 0, getWidth(), getHeight(), this);
+        }
 
         // Actualiza la imagen de fondo.
         graGraficaApplet.setColor (getBackground ());
@@ -530,6 +576,14 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
     }    
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-
+        if(keyEvent.getKeyCode() == KeyEvent.VK_N){
+            if(iBackground < 4) {
+               iBackground++;
+            }
+           
+            else {
+                iBackground = 0;
+            }
+        }
     }
 }
