@@ -633,7 +633,7 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
     }    
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        if(keyEvent.getKeyCode() == KeyEvent.VK_N){
+        if(keyEvent.getKeyCode() == KeyEvent.VK_N && !bPause){
             if(iBackground < 4 && iBackground != 0 && !bPause) {
                iBackground++;
             }
@@ -642,8 +642,7 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
                iBackground = 0;
             }
         }
-        
-        else if(keyEvent.getKeyCode() == KeyEvent.VK_P){ 
+        if(keyEvent.getKeyCode() == KeyEvent.VK_P){ 
             if(iBackground == 3 || iBackground ==4) {
                 bPause = !bPause;
             }
