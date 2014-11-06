@@ -9,7 +9,11 @@ import javax.swing.JFrame;
 
 /**
  *
-    * @author Luis Alberto Lamadrid
+ * @author VALKYRIE
+ * @author Luis Alberto Lamadrid
+ * @author  name 2
+ * @author name 3
+ * 
  */
 public class Main {
     public static void main(String[] args){
