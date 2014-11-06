@@ -24,7 +24,7 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
     /* objetos para manejar el buffer del Applet y este no parpadee */
     private Image    imaImagenApplet;   // Imagen a proyectar en Applet	
     private Graphics graGraficaApplet;  // Objeto grafico de la Imagen
-    private boolean bPausado;       //pausa
+    private boolean bPause;       //pausa
 
     //Objeto de la clase Animacion para el manejo de la animación
     private Animacion animChickenRun;
@@ -32,10 +32,13 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
     private Animacion animChickenStand;
     private Animacion animHeroRun;
     private Animacion animHeroStand;
-    private Animacion animHeroJump;    
+    private Animacion animHeroJump;   
+    private Animacion animPato1;
+    private Animacion animPato2;
 	
     //Variables de control de tiempo de la animación
     private long tiempoActual;
+    private int iContTiempo; //contador de tiempo
     /*
     Variable para controlar backgrounds
     0-Loading
@@ -45,6 +48,9 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
     4-Level 1
     */
     private int iBackground;
+    //imagen props
+    private Image imaHealthBar;
+    private Image imaPause;
     
     //arreglo de backgrounds
     private ArrayList arlBackgrounds;
@@ -64,6 +70,9 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
     public void init() {    
         // hago el applet de un tamaño 500,500
         setSize(1600, 600);
+        iContTiempo = 0;
+        //sin pause
+        bPause = false;
 
         //empiezo en main
         iBackground = 0;
@@ -350,6 +359,24 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
         animHeroJump.sumaCuadro(imaHeroJump20, 50);
         animHeroJump.sumaCuadro(imaHeroJump21, 50);
         
+        //Creo imagenes pato y animaciones
+        Image imaPato1 = Toolkit.getDefaultToolkit().getImage(
+                this.getClass().getResource("pato_stand_01.png"));
+        Image imaPato2= Toolkit.getDefaultToolkit().getImage(
+                this.getClass().getResource("pato_stand_02.png"));
+        
+        animPato1 = new Animacion(0, 0);
+        animPato2 = new Animacion(0, 0);
+        animPato1.sumaCuadro(imaPato1, 150);
+        animPato2.sumaCuadro(imaPato1, 150);
+        animPato1.sumaCuadro(imaPato2, 150);
+        animPato2.sumaCuadro(imaPato2, 150);
+        
+        imaHealthBar = Toolkit.getDefaultToolkit().getImage(
+            this.getClass().getResource("Health_bar.jpg"));
+        imaPause = Toolkit.getDefaultToolkit().getImage(
+            this.getClass().getResource("Pause_menu.jpg"));
+        
         //lleno el arraylist con imagenes de fondo
         arlBackgrounds = new ArrayList();
         
@@ -429,8 +456,10 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
                se checa si hubo colisiones para desaparecer jugadores o corregir
                movimientos y se vuelve a pintar todo
             */ 
-            actualiza();
-            checaColision();
+            if(!bPause) {
+                actualiza();
+                checaColision();
+            }
                 
             repaint();
             try	{
@@ -466,6 +495,18 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
          animHeroRun.actualiza(tiempoTranscurrido);
          animHeroStand.actualiza(tiempoTranscurrido);
          animHeroJump.actualiza(tiempoTranscurrido);
+         animPato1.actualiza(tiempoTranscurrido);
+         animPato2.actualiza(tiempoTranscurrido);
+         
+         if(iBackground == 0) {
+             if(iContTiempo <= 120) {
+                 iContTiempo++;
+             }
+             else {
+                 iContTiempo = 0;
+                 iBackground++;
+             }
+         }
     }
     
     /**
@@ -536,16 +577,19 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
         // si la imagen ya se cargo
         g.setFont(new Font("TimesRoman", Font.BOLD, 15));
         if (animChickenStand != null && animChickenRun != null
-                && animChickenAttack != null && animHeroRun != null
-                    &&animHeroStand != null) { 
+            && animChickenAttack != null && animHeroRun != null
+                &&animHeroStand != null
+                    && (iBackground == 3 || iBackground == 4) 
+                            && bPause == false) { 
+            
+            g.drawImage(imaHealthBar, getWidth() - 230, 50, this);
             
             g.drawString("Standing",getWidth()/2 - 200, getHeight() - 210);
             g.drawImage(animChickenStand.getImagen() ,getWidth()/2 - 200 , 
                     getHeight() - 100, this);
             g.drawImage(animHeroStand.getImagen() ,getWidth()/2 - 200 , 
                     getHeight() - 200, this);
-            
-            
+                        
             g.drawString("Running",getWidth()/2 - 100, getHeight() - 210);
             g.drawImage(animChickenRun.getImagen() ,getWidth()/2 - 100, 
                     getHeight() - 100, this);
@@ -559,6 +603,19 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
                     getHeight() - 200, this);
                     
         }      
+        else if (bPause) {
+            g.drawImage(imaPause, getWidth()/2 - (imaPause.getWidth(this) / 2),
+                    getHeight()/2 - (imaPause.getHeight(this)) / 2, this);
+        }
+        
+        else if(iBackground == 2){
+            g.drawImage(animHeroStand.getImagen() ,getWidth()/2 - 370 , 
+                    getHeight() - 124, this);
+            g.drawImage(animPato1.getImagen(), getWidth()/2,
+                    getHeight() - 124, this);
+            g.drawImage(animPato2.getImagen(), getWidth()/2 + 370,
+                    getHeight() - 124, this);
+        }
 
         // sino se ha cargado se dibuja un mensaje 
         else {
@@ -577,12 +634,18 @@ public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
     @Override
     public void keyReleased(KeyEvent keyEvent) {
         if(keyEvent.getKeyCode() == KeyEvent.VK_N){
-            if(iBackground < 4) {
+            if(iBackground < 4 && iBackground != 0 && !bPause) {
                iBackground++;
             }
            
             else {
-                iBackground = 0;
+               iBackground = 0;
+            }
+        }
+        
+        else if(keyEvent.getKeyCode() == KeyEvent.VK_P){ 
+            if(iBackground == 3 || iBackground ==4) {
+                bPause = !bPause;
             }
         }
     }
