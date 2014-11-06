@@ -15,9 +15,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import static java.lang.System.console;
 import java.net.URL;
-import java.util.LinkedList;
 import javax.swing.JFrame;
 
 public class Prototipo_Alfa extends JFrame implements Runnable, KeyListener {
