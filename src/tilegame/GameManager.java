@@ -40,6 +40,7 @@ public class GameManager extends GameCore {
     private GameAction jump;
     private GameAction exit;
     private GameAction pause;
+    private GameAction next;
 
     private boolean bCanMoveR;
     private boolean bCanMoveL;
@@ -66,7 +67,7 @@ public class GameManager extends GameCore {
             resourceManager.loadImage("backgrounds/valkyrie.png"));
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/main.png"));
+            resourceManager.loadImage("backgrounds/Menu.png"));
         
         renderer.addBackground(
             resourceManager.loadImage("backgrounds/tutorial.png"));
@@ -102,6 +103,8 @@ public class GameManager extends GameCore {
         exit = new GameAction("exit",
             GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         pause = new GameAction("pause");
+        next = new GameAction("next");
+        
         inputManager = new InputManager(
             screen.getFullScreenWindow());
         inputManager.setCursor(InputManager.INVISIBLE_CURSOR);
@@ -111,6 +114,7 @@ public class GameManager extends GameCore {
         inputManager.mapToKey(jump, KeyEvent.VK_SPACE);
         inputManager.mapToKey(exit, KeyEvent.VK_ESCAPE);
         inputManager.mapToKey(pause, KeyEvent.VK_P);
+        inputManager.mapToKey(next, KeyEvent.VK_N);
         
     }
 
@@ -119,6 +123,11 @@ public class GameManager extends GameCore {
 
         if (exit.isPressed()) {
             stop();
+        }
+        
+        if(next.isPressed() && iLevel == 1) {
+            iLevel++;
+            renderer.setBackground(iLevel);        
         }
 
         Player player = (Player)map.getPlayer();
@@ -271,12 +280,12 @@ public class GameManager extends GameCore {
     public void update(long elapsedTime) {
         Creature player = (Creature)map.getPlayer();
         
-        if(iContTime < 120) {
+        if(iLevel == 0 && iContTime < 120) {
             iContTime++;
         }
-        else{
+        else if(iLevel == 0){
             iContTime = 0;
-            iLevel = 3;
+            iLevel++;
             renderer.setBackground(iLevel);
         }
 
@@ -447,7 +456,15 @@ public class GameManager extends GameCore {
 
         if (powerUp instanceof PowerUp.Goal) {
             // advance to next map
+            if(iLevel < 4){
+                iLevel++;
+            }
+            else {
+                iLevel = 1;
+                resourceManager.setiCurrentMap(2);
+            }
             map = resourceManager.loadNextMap();
+            renderer.setBackground(iLevel);
         }
     }
 

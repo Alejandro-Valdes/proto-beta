@@ -10,12 +10,12 @@
 #   2       Bad Guy 2 (fly)
                                                                  
 II                                                                                   IIIIIII
-II                                                                             *     IIIIIII
-II                                                                    o1!     II     IIIIIII
+II                                                                                   IIIIIII
+II                                                                    o1!            IIIIIII
 II                                                                    IIII           IIIIIII
 II                                                         !   1  !                  IIIIIII
 II                        1   !      1                    IIIIIIIIII                 IIIIIII          
 II                    IIIIIIIIIIIIIIIII                                              IIIIIII       
 II                    IJJJJJJJJJJJJJJJI                                              IIIIIII
-II             2  o   IJJJJJJJJJJJJJJJI               2                          2   IIIIIII        
+II             2  o   IJJJJJJJJJJJJJJJI               2                *         2   IIIIIII        
 IIBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBIIIIIII

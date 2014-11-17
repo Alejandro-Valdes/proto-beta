@@ -78,6 +78,10 @@ public class ResourceManager {
         return newImage;
     }
     
+    public void setiCurrentMap(int iI) {
+        iCurrentMap = iI;
+    }
+    
     public TileMap loadNextMap() {
         TileMap map = null;
         while (map == null) {
