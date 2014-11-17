@@ -26,7 +26,6 @@ public abstract class GameCore {
     };
     
     private boolean bIsRunning;
-    public boolean bPause = false;
     protected ScreenManager screen;
     
     /**
@@ -36,10 +35,6 @@ public abstract class GameCore {
         bIsRunning = false;
     }
     
-    
-    public void setPause() {
-        bPause = !bPause;
-    }
     
     /**
      * Calls init() and gameLoop()
@@ -114,12 +109,8 @@ public abstract class GameCore {
             lCurrTime += lElapsedTime;
 
             // update
-            checkPause(lElapsedTime);
-
-            if(!bPause) {
-                update(lElapsedTime);   
-            }
-            
+            update(lElapsedTime);   
+             
             // draw the screen
             Graphics2D g = screen.getGraphics();
             draw(g);

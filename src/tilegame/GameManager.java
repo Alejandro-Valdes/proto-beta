@@ -44,6 +44,7 @@ public class GameManager extends GameCore {
 
     private boolean bCanMoveR;
     private boolean bCanMoveL;
+    private boolean bPause;
     private int iLevel;
     private int iContTime;
 
@@ -96,13 +97,14 @@ public class GameManager extends GameCore {
     private void initInput() {
         bCanMoveR = true;
         bCanMoveL = true;
+        bPause = false;
         moveLeft = new GameAction("moveLeft");
         moveRight = new GameAction("moveRight");
         jump = new GameAction("jump",
             GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         exit = new GameAction("exit",
             GameAction.I_DETECT_INITIAL_PRESS_ONLY);
-        pause = new GameAction("pause");
+        pause = new GameAction("pause", GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         next = new GameAction("next");
         
         inputManager = new InputManager(
@@ -121,38 +123,50 @@ public class GameManager extends GameCore {
 
     private void checkInput(long elapsedTime) {
 
-        if (exit.isPressed()) {
-            stop();
+        if(!bPause) {
+            if (exit.isPressed()) {
+                stop();
+            }
+
+            if(next.isPressed() && iLevel == 1) {
+                iLevel++;
+                renderer.setBackground(iLevel);        
+            }
+
+            Player player = (Player)map.getPlayer();
+            if (player.isAlive()) {
+                float velocityX = 0;
+
+                if(bCanMoveL){
+                    if (moveLeft.isPressed()) {
+                        velocityX-=player.getMaxSpeed();
+                    }
+                }
+
+                if(bCanMoveR){
+                    if (moveRight.isPressed()) {
+                        velocityX+=player.getMaxSpeed();
+                    }
+                }
+                
+                if (pause.isPressed()) {
+                    bPause = true;
+                }
+
+                if (jump.isPressed()) {
+                    player.jump(false);
+                    bCanMoveR = true;
+                    bCanMoveL = true;
+                }
+
+                player.setVelocityX(velocityX);
+            }
         }
         
-        if(next.isPressed() && iLevel == 1) {
-            iLevel++;
-            renderer.setBackground(iLevel);        
-        }
-
-        Player player = (Player)map.getPlayer();
-        if (player.isAlive()) {
-            float velocityX = 0;
-            
-            if(bCanMoveL){
-                if (moveLeft.isPressed()) {
-                    velocityX-=player.getMaxSpeed();
-                }
+        else {
+            if (pause.isPressed()) {
+                bPause = false;
             }
-                
-            if(bCanMoveR){
-                if (moveRight.isPressed()) {
-                    velocityX+=player.getMaxSpeed();
-                }
-            }
-            
-            if (jump.isPressed()) {
-                player.jump(false);
-                bCanMoveR = true;
-                bCanMoveL = true;
-            }
-
-            player.setVelocityX(velocityX);
         }
 
     }
@@ -161,6 +175,27 @@ public class GameManager extends GameCore {
     public void draw(Graphics2D g) {
         renderer.draw(g, map,
             screen.getWidth(), screen.getHeight());
+        
+        if(iLevel == 1) {
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("TimesRoman", Font.BOLD, 60));
+            g.drawString("PROYECT A00" , screen.getWidth() / 2 - 200,
+                     200);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+            g.drawString("PRESS N TO START" , screen.getWidth() / 2 - 110,
+                     230);
+            g.drawString("PRESS P TO PAUSE" , screen.getWidth() / 2 - 110,
+                     250);
+            g.drawString("PRESS ESC TO EXIT" , screen.getWidth() / 2 - 110,
+                     270);
+            
+        }
+        
+        if(bPause) {
+            g.setFont(new Font("TimesRoman", Font.BOLD, 60));
+            g.drawString("PAUSE" , screen.getWidth() / 2 - 200,
+                     200);
+        }
     }
 
 
@@ -263,15 +298,7 @@ public class GameManager extends GameCore {
         // no collision found
         return null;
     }
-    
-    /**Checks for puase
-     * 
-     */
-    public void checkPause(long elapsedTime) {
-        if(pause.isPressed()) {
-                setPause();
-        }
-    }
+   
 
     /**
         Updates Animation, position, and velocity of all Sprites
@@ -294,30 +321,32 @@ public class GameManager extends GameCore {
             map = resourceManager.reloadMap();
             return;
         }
-
-        // get keyboard/mouse input
-        checkInput(elapsedTime);
-
-        // update player
-        updateCreature(player, elapsedTime);
         
-        player.update(elapsedTime);
+        // get keyboard/mouse input
+            checkInput(elapsedTime);
 
-        // update other sprites
-        Iterator i = map.getSprites();
-        while (i.hasNext()) {
-            Sprite sprite = (Sprite)i.next();
-            if (sprite instanceof Creature) {
-                Creature creature = (Creature)sprite;
-                if (creature.getState() == Creature.I_STATE_DEAD) {
-                    i.remove();
+        if(!bPause){       
+            // update player
+            updateCreature(player, elapsedTime);
+
+            player.update(elapsedTime);
+
+            // update other sprites
+            Iterator i = map.getSprites();
+            while (i.hasNext()) {
+                Sprite sprite = (Sprite)i.next();
+                if (sprite instanceof Creature) {
+                    Creature creature = (Creature)sprite;
+                    if (creature.getState() == Creature.I_STATE_DEAD) {
+                        i.remove();
+                    }
+                    else {
+                        updateCreature(creature, elapsedTime);
+                    }
                 }
-                else {
-                    updateCreature(creature, elapsedTime);
-                }
+                // normal update
+                sprite.update(elapsedTime);
             }
-            // normal update
-            sprite.update(elapsedTime);
         }
     }
 
@@ -469,3 +498,4 @@ public class GameManager extends GameCore {
     }
 
 }
+
