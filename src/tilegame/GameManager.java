@@ -5,7 +5,6 @@ import input.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Iterator;
-
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.sampled.AudioFormat;
@@ -104,7 +103,8 @@ public class GameManager extends GameCore {
             GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         exit = new GameAction("exit",
             GameAction.I_DETECT_INITIAL_PRESS_ONLY);
-        pause = new GameAction("pause", GameAction.I_DETECT_INITIAL_PRESS_ONLY);
+        pause = new GameAction("pause", 
+            GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         next = new GameAction("next");
         
         inputManager = new InputManager(
@@ -120,10 +120,16 @@ public class GameManager extends GameCore {
         
     }
 
+    private void checkSystemInput(long elapsedTime) {
+        
+        if(pause.isPressed()){
+            bPause = false; 
+            pause.reset();
+        }
+    }
 
     private void checkInput(long elapsedTime) {
-
-        if(!bPause) {
+            
             if (exit.isPressed()) {
                 stop();
             }
@@ -151,6 +157,7 @@ public class GameManager extends GameCore {
                 
                 if (pause.isPressed()) {
                     bPause = true;
+                    pause.reset();
                 }
 
                 if (jump.isPressed()) {
@@ -161,14 +168,6 @@ public class GameManager extends GameCore {
 
                 player.setVelocityX(velocityX);
             }
-        }
-        
-        else {
-            if (pause.isPressed()) {
-                bPause = false;
-            }
-        }
-
     }
 
 
@@ -322,10 +321,15 @@ public class GameManager extends GameCore {
             return;
         }
         
-        // get keyboard/mouse input
-            checkInput(elapsedTime);
+        if(bPause) {
+            checkSystemInput(elapsedTime);
+        }
 
-        if(!bPause){       
+        else if(!bPause){      
+            
+            // get keyboard/mouse input
+            checkInput(elapsedTime);
+            
             // update player
             updateCreature(player, elapsedTime);
 
