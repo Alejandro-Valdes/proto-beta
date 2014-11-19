@@ -240,12 +240,12 @@ public class ResourceManager {
             loadImage("player/Hero Sprite Running_04.png"),
             loadImage("player/Hero Sprite Running_05.png"),
             loadImage("player/Hero Sprite Running_06.png"),
-            loadImage("gallinas/gallina_zombie_attack_01.png"),
-            loadImage("gallinas/gallina_zombie_attack_02.png"),
-            loadImage("gallinas/gallina_zombie_attack_03.png"),
-            loadImage("gallinas/gallina_zombie_attack_04.png"),
-            loadImage("gallinas/gallina_zombie_attack_05.png"),
-            loadImage("gallinas/gallina_zombie_attack_06.png"),
+            loadImage("gallinas/gallina_zombie_run_01.png"),
+            loadImage("gallinas/gallina_zombie_run_02.png"),
+            loadImage("gallinas/gallina_zombie_run_03.png"),
+            loadImage("gallinas/gallina_zombie_run_04.png"),
+            loadImage("gallinas/gallina_zombie_run_05.png"),
+            loadImage("gallinas/gallina_zombie_run_06.png"),
             loadImage("borrego/borrego_run01.png"),
             loadImage("borrego/borrego_run02.png"),
             loadImage("borrego/borrego_run03.png"),
@@ -508,10 +508,10 @@ public class ResourceManager {
     private void loadPowerUpSprites() {//Se cargan las animaciones de los objetos a agarrar
         // create "goal" sprite
         Animation anim = new Animation();
-        anim.addFrame(loadImage("extras/burbuja1.png"), 150);
-        anim.addFrame(loadImage("extras/burbuja2.png"), 150);
-        anim.addFrame(loadImage("extras/burbuja3.png"), 150);
-        anim.addFrame(loadImage("extras/burbuja2.png"), 150);
+        anim.addFrame(loadImage("extras/Chilaquiles_puntos01.png"), 150);
+        anim.addFrame(loadImage("extras/Chilaquiles_puntos02.png"), 150);
+        anim.addFrame(loadImage("extras/Chilaquiles_puntos03.png"), 150);
+        anim.addFrame(loadImage("extras/Chilaquiles_puntos02.png"), 150);
         sprGoal = new PowerUp.Goal(anim);
 
         // create "star" sprite
