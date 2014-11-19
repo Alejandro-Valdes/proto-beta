@@ -234,10 +234,12 @@ public class ResourceManager {
 
         // load left-facing images
         images[0] = new Image[] {
-            loadImage("player1.png"),
-            loadImage("player2.png"),
-            loadImage("player3.png"),
-            loadImage("player4.png"),
+            loadImage("player/Hero Sprite Running_01.png"),
+            loadImage("player/Hero Sprite Running_02.png"),
+            loadImage("player/Hero Sprite Running_03.png"),
+            loadImage("player/Hero Sprite Running_04.png"),
+            loadImage("player/Hero Sprite Running_05.png"),
+            loadImage("player/Hero Sprite Running_06.png"),
             loadImage("gallinas/gallina_zombie_attack_01.png"),
             loadImage("gallinas/gallina_zombie_attack_02.png"),
             loadImage("gallinas/gallina_zombie_attack_03.png"),
@@ -277,20 +279,29 @@ public class ResourceManager {
         
         for (int i=0; i<5; i++) {
             animPlayer[i] = createPlayerAnim(
-                images[i][0], images[i][1], images[i][2],images[i][3]);
+                images[i][0], images[i][1], images[i][2],images[i][3], 
+                    images[i][4],images[i][5]);
             
             animChicken[i] = createChickenAnim(
-               images[i][4], images[i][5], images[i][6],images[i][7],
-                    images[i][8],images[i][9]);
+               images[i][6], images[i][7], images[i][8],images[i][9],
+                    images[i][10],images[i][11]);
             
             
             //las otras animaciones las hago por fuera 
             animBorrego[i] = createBorregoAnim(
-                images[i][10], images[i][11], images[i][12],images[i][13],
-                    images[i][14],images[i][15],images[i][16],images[i][17]);
+                images[i][12], images[i][13], images[i][14],images[i][15],
+                    images[i][16],images[i][17],images[i][18],images[i][19]);
             
         }
         
+        //Heroe Parado
+        Animation animPlayerStand = new Animation();
+        animPlayerStand.addFrame(
+                loadImage("player/Hero Sprite Idle_00.png"), 150);
+        animPlayerStand.addFrame(
+                loadImage("player/Hero Sprite Idle_01.png"), 150);
+        
+        //Ataque gallina
         Animation animChickenAttackLeft = new Animation();
         animChickenAttackLeft.addFrame(
                 loadImage("gallinas/gallina_zombie_attack2_01.png"), 150);
@@ -386,27 +397,78 @@ public class ResourceManager {
                 getMirrorImage(loadImage
                     ("borrego/borrego_dies08.png")), 150);
        
+        
+        //MUERTE GALLINA
+        Animation animGallinaDieLeft = new Animation();
+        animGallinaDieLeft.addFrame(
+                loadImage("gallinas/gallina_zombie_dies01.png"), 150);
+        animGallinaDieLeft.addFrame(
+                loadImage("gallinas/gallina_zombie_dies02.png"), 150);
+        animGallinaDieLeft.addFrame(
+                loadImage("gallinas/gallina_zombie_dies03.png"), 150);
+        animGallinaDieLeft.addFrame(
+                loadImage("gallinas/gallina_zombie_dies04.png"), 150);
+        animGallinaDieLeft.addFrame(
+                loadImage("gallinas/gallina_zombie_dies05.png"), 150);
+        animGallinaDieLeft.addFrame(
+                loadImage("gallinas/gallina_zombie_dies06.png"), 150);
+        animGallinaDieLeft.addFrame(
+                loadImage("gallinas/gallina_zombie_dies07.png"), 150);
+        animGallinaDieLeft.addFrame(
+                loadImage("gallinas/gallina_zombie_dies08.png"), 150);
+        
+        Animation animGallinaDieRight = new Animation();
+        animGallinaDieRight.addFrame(
+                getMirrorImage(loadImage
+                    ("gallinas/gallina_zombie_dies01.png")), 150);
+        animGallinaDieRight.addFrame(
+                getMirrorImage(loadImage
+                    ("gallinas/gallina_zombie_dies02.png")), 150);
+        animGallinaDieRight.addFrame(
+                getMirrorImage(loadImage
+                    ("gallinas/gallina_zombie_dies03.png")), 150);
+        animGallinaDieRight.addFrame(
+                getMirrorImage(loadImage
+                    ("gallinas/gallina_zombie_dies04.png")), 150);
+        animGallinaDieRight.addFrame(
+                getMirrorImage(loadImage
+                    ("gallinas/gallina_zombie_dies05.png")), 150);
+        animGallinaDieRight.addFrame(
+                getMirrorImage(loadImage
+                    ("gallinas/gallina_zombie_dies06.png")), 150);
+        animGallinaDieRight.addFrame(
+                getMirrorImage(loadImage
+                    ("gallinas/gallina_zombie_dies07.png")), 150);
+        animGallinaDieRight.addFrame(
+                getMirrorImage(loadImage
+                    ("gallinas/gallina_zombie_dies08.png")), 150);
+       
 
         // create creature sprites
-        sprPlayer = new Player(animPlayer[0], animPlayer[1],
-            animPlayer[2], animPlayer[3], null, null);
+        //en player es 1, 0 para que esten iguales.
+        sprPlayer = new Player(animPlayer[1], animPlayer[0],
+            animPlayer[2], animPlayer[3], null, null, animPlayerStand);
         sprChicken = new Minion(animChicken[0], animChicken[1],
-            animChicken[2], animChicken[3], animChickenAttackLeft,
-                animChickenAttackRight);
+            animGallinaDieLeft, animGallinaDieRight, animChickenAttackLeft,
+                animChickenAttackRight, null);
         sprBorrego = new Minion(animBorrego[0], animBorrego[1],
             animBorregoDieLeft, animBorregoDieRight, animBorregoAttackLeft, 
-                animBorregoAttackRight);
+                animBorregoAttackRight, null);
     }
 
 
     private Animation createPlayerAnim(Image player1,
-        Image player2, Image player3, Image player4)
+        Image player2, Image player3, Image player4,
+            Image player5, Image player6)
     {
         Animation anim = new Animation();
         anim.addFrame(player1, 150);
         anim.addFrame(player2, 150);
         anim.addFrame(player3, 150);
         anim.addFrame(player4, 150);
+        anim.addFrame(player5, 150);
+        anim.addFrame(player6, 150);
+        //anim.addFrame(player1, 150);
         
         return anim;
     }

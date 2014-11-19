@@ -116,7 +116,7 @@ public class GameManager extends GameCore {
         inputManager.mapToKey(jump, KeyEvent.VK_SPACE);
         inputManager.mapToKey(exit, KeyEvent.VK_ESCAPE);
         inputManager.mapToKey(pause, KeyEvent.VK_P);
-        inputManager.mapToKey(next, KeyEvent.VK_N);
+        inputManager.mapToKey(next, KeyEvent.VK_S);
         
     }
 
@@ -181,7 +181,7 @@ public class GameManager extends GameCore {
             g.drawString("PROYECT A00" , screen.getWidth() / 2 - 200,
                      200);
             g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-            g.drawString("PRESS N TO START" , screen.getWidth() / 2 - 110,
+            g.drawString("PRESS S TO START" , screen.getWidth() / 2 - 110,
                      230);
             g.drawString("PRESS P TO PAUSE" , screen.getWidth() / 2 - 110,
                      250);

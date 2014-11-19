@@ -15,10 +15,10 @@ public class Minion extends Creature {
         
     public Minion(Animation left, Animation right, 
             Animation deadLeft, Animation deadRight, Animation animAttackLeft,
-                Animation animAttackRight)
+                Animation animAttackRight, Animation animStand)
     {
         super(left, right, deadLeft, deadRight, animAttackLeft,
-                animAttackRight);
+                animAttackRight, animStand);
     }
     
     public float getMaxSpeed() {
@@ -54,9 +54,7 @@ public class Minion extends Creature {
             newAnim = animDeadRight;
         }
         
-        
-        
-        
+         
        
         // update the Animation
         if(bMove == true){

@@ -27,6 +27,7 @@ public abstract class Creature extends Sprite {
     protected Animation animDeadRight;
     protected Animation animAttackLeft;
     protected Animation animAttackRight;
+    protected Animation animStand;
     protected int iState;
     protected long lStateTime;
     
@@ -36,7 +37,8 @@ public abstract class Creature extends Sprite {
     
     public Creature(Animation animLeft, Animation animRight,
             Animation animDeadLeft, Animation animDeadRight, 
-                Animation animAttackLeft, Animation animAttackRight) {
+                Animation animAttackLeft, Animation animAttackRight,
+                    Animation animStand) {
         super(animRight);
         
         this.animLeft = animLeft;
@@ -58,6 +60,13 @@ public abstract class Creature extends Sprite {
             this.animAttackRight = animAttackRight;
         }
         
+        if(animStand == null) {
+            this.animStand = animLeft;
+        }
+        else {
+            this.animStand = animStand;
+        }
+        
         iState = I_STATE_NORMAL;
         bMove = true;
         bAttack = false;
@@ -75,6 +84,7 @@ public abstract class Creature extends Sprite {
                 (Animation)animDeadRight.clone(),
                 (Animation)animAttackLeft.clone(),
                 (Animation)animAttackRight.clone(),
+                (Animation)animStand.clone()
             });
         }
         catch (Exception ex) {

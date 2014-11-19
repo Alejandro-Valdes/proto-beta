@@ -15,11 +15,12 @@ public class Player extends Creature {
 
     public Player(Animation animLeft, Animation animRight,
         Animation animDeadLeft, Animation animDeadRight,
-            Animation animAttackLeft, Animation animAttackRight)
+            Animation animAttackLeft, Animation animAttackRight, 
+                Animation animStand)
     {
         
         super(animLeft, animRight, animDeadLeft, animDeadRight, 
-                animAttackLeft, animAttackRight);
+                animAttackLeft, animAttackRight, animStand);
     }
 
 
@@ -84,22 +85,31 @@ public class Player extends Creature {
         else if (getVelocityX() > 0) {
             newAnim = animRight;
         }
+        
+        else {
+            newAnim = animStand;
+        }
+        
         if (iState == I_STATE_DYING && newAnim == animLeft) {
             newAnim = animDeadLeft;
         }
         else if (iState == I_STATE_DYING && newAnim == animRight) {
             newAnim = animDeadRight;
         }
-       
+        
+        if(getVelocityY() != 0) {
+            newAnim = animRight;
+        }
+              
         // update the Animation
         if(bMove == true){
-        if (animAnimation != newAnim ) {
-            animAnimation = newAnim;
-            animAnimation.start();
-        }
-        else {
-            animAnimation.update(lElapsedTime);
-        }
+            if (animAnimation != newAnim ) {
+                animAnimation = newAnim;
+                animAnimation.start();
+            }
+            else {
+                animAnimation.update(lElapsedTime);
+            }
         
         }
 
