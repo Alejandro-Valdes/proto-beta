@@ -234,12 +234,12 @@ public class ResourceManager {
 
         // load left-facing images
         images[0] = new Image[] {
-            loadImage("player/Hero Sprite Running_01.png"),
-            loadImage("player/Hero Sprite Running_02.png"),
-            loadImage("player/Hero Sprite Running_03.png"),
-            loadImage("player/Hero Sprite Running_04.png"),
-            loadImage("player/Hero Sprite Running_05.png"),
-            loadImage("player/Hero Sprite Running_06.png"),
+            loadImage("player/Hero_Sprite_Running_01.png"),
+            loadImage("player/Hero_Sprite_Running_02.png"),
+            loadImage("player/Hero_Sprite_Running_03.png"),
+            loadImage("player/Hero_Sprite_Running_04.png"),
+            loadImage("player/Hero_Sprite_Running_05.png"),
+            loadImage("player/Hero_Sprite_Running_06.png"),
             loadImage("gallinas/gallina_zombie_run_01.png"),
             loadImage("gallinas/gallina_zombie_run_02.png"),
             loadImage("gallinas/gallina_zombie_run_03.png"),

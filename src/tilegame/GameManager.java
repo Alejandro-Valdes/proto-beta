@@ -16,9 +16,7 @@ import tilegame.sprites.*;
 */
 public class GameManager extends GameCore {
 
-    public static void main(String[] args) {
-        new GameManager().run();
-    }
+    
 
     // uncompressed, 44100Hz, 16-bit, mono, signed, little-endian
     private static final AudioFormat PLAYBACK_FORMAT =
@@ -63,7 +61,7 @@ public class GameManager extends GameCore {
         renderer = new TileMapRenderer();
         iLevel = 0;
         iContTime = 0;
-        iVida = 100;
+        iVida = 10;
         iContVida = 0;
         
         
@@ -328,7 +326,14 @@ public class GameManager extends GameCore {
 
         // player is dead! start map over
         if (player.getState() == Creature.I_STATE_DEAD) {
-            map = resourceManager.reloadMap();
+            //map = resourceManager.reloadMap();
+            iLevel = 1;
+            renderer.setBackground(iLevel);
+            iVida = 10;
+            resourceManager.setiCurrentMap(2);
+            map = resourceManager.loadNextMap();
+            bCanMoveL = true;
+            bCanMoveR = true;
             return;
         }
         
@@ -463,7 +468,7 @@ public class GameManager extends GameCore {
                 iContVida = 0;
                 iVida -= 5;
             }
-            if(iVida < 0) {
+            if(iVida <= 0) {
                 player.setState(Creature.I_STATE_DYING);
             }
             if (canKill) {

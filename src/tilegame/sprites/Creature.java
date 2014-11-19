@@ -9,6 +9,7 @@ import graphics.*;
  */
 public abstract class Creature extends Sprite {
     
+    
     /**
      * Amount of time to go from STATE_FYING to STATE_DEAD
      */
