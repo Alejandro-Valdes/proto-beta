@@ -46,6 +46,8 @@ public class GameManager extends GameCore {
     private boolean bPause;
     private int iLevel;
     private int iContTime;
+    private int iVida;
+    private int iContVida;
 
     public void init() {
         super.init();
@@ -61,6 +63,8 @@ public class GameManager extends GameCore {
         renderer = new TileMapRenderer();
         iLevel = 0;
         iContTime = 0;
+        iVida = 100;
+        iContVida = 0;
         
         
         renderer.addBackground(
@@ -188,6 +192,13 @@ public class GameManager extends GameCore {
             g.drawString("PRESS ESC TO EXIT" , screen.getWidth() / 2 - 110,
                      270);
             
+        }
+        
+        else if(iLevel > 1) {
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("TimesRoman", Font.BOLD, 40));
+            g.drawString("LIFE: " + iVida , screen.getWidth() - 200,
+                     50);
         }
         
         if(bPause) {
@@ -444,6 +455,17 @@ public class GameManager extends GameCore {
         }
         else if (collisionSprite instanceof Creature) {
             Creature badguy = (Creature)collisionSprite;
+            
+            if(iContVida<30){
+                iContVida++;
+            }
+            else{
+                iContVida = 0;
+                iVida -= 5;
+            }
+            if(iVida < 0) {
+                player.setState(Creature.I_STATE_DYING);
+            }
             if (canKill) {
                 // kill the badguy and make player bounce
                 badguy.setState(Creature.I_STATE_DYING);
@@ -455,6 +477,7 @@ public class GameManager extends GameCore {
             }
             else if (player.bOnGround){
                 // player dies!
+                
                 player.setVelocityX(0);
                 if(badguy.getX() > player.getX()) {
                     badguy.setX(player.getX() + player.getWidth());
