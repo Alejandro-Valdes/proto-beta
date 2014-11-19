@@ -23,6 +23,7 @@ public class ResourceManager {
     private Sprite sprPlayer;
     private Sprite sprGoal;
     private Sprite sprChicken;
+    private Sprite sprDuck1;
     private Sprite sprBorrego;
     private Sprite sprGota;
     
@@ -170,6 +171,9 @@ public class ResourceManager {
                 else if (ch == '2') {
                     addSprite(newMap, sprBorrego, x, y);
                 }
+                else if (ch == '3') {
+                    addSprite(newMap, sprDuck1, x, y);
+                }
             }
         }
 
@@ -273,9 +277,10 @@ public class ResourceManager {
         }
 
         // create creature animations
-        Animation[] animPlayer = new Animation[6];
+        Animation[] animPlayer  = new Animation[6];
         Animation[] animChicken = new Animation[5];
         Animation[] animBorrego = new Animation[8];
+        Animation[] animPato    = new Animation[2];
         
         for (int i=0; i<5; i++) {
             animPlayer[i] = createPlayerAnim(
@@ -293,6 +298,13 @@ public class ResourceManager {
                     images[i][16],images[i][17],images[i][18],images[i][19]);
             
         }
+        
+        //Pato parado
+        Animation animDuckStand = new Animation();
+        animDuckStand.addFrame(
+                loadImage("patos/pato_stand_01.png"), 150);
+        animDuckStand.addFrame(
+                loadImage("patos/pato_stand_02.png"), 150);       
         
         //Heroe Parado
         Animation animPlayerStand = new Animation();
@@ -454,7 +466,9 @@ public class ResourceManager {
         sprBorrego = new Minion(animBorrego[0], animBorrego[1],
             animBorregoDieLeft, animBorregoDieRight, animBorregoAttackLeft, 
                 animBorregoAttackRight, null);
-       // sprDuck1 = new Duck();
+        sprDuck1 = new Duck(animDuckStand, animDuckStand, animDuckStand,
+                            animDuckStand, animDuckStand, animDuckStand,
+                            animDuckStand);
     }
 
 

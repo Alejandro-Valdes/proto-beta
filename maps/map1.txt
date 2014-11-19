@@ -12,5 +12,5 @@
                    
       
                                                      
-        EF  1            1            2            EAF     * 2
+        EF  1    3       1            2            EAF     * 2
 BBBBBBBBGHBBBBBBBGHBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBGAAHBBBBBBBBBBB

@@ -12,32 +12,24 @@ import static tilegame.sprites.Creature.I_STATE_DYING;
 
 /**
  *
- * @author Beto
- */
-public class Duck {
-    
-}
-
-/**
- *
  * @author Alejandro Valdes
  */
-public class Minion extends Creature {
+public class Duck extends Creature {
         
-    public Minion(Animation left, Animation right, 
-            Animation deadLeft, Animation deadRight, Animation animAttackLeft,
-                Animation animAttackRight, Animation animStand)
+    public Duck(Animation a, Animation b, Animation c,
+                Animation d, Animation e, Animation f,
+                Animation animStand)
     {
-        super(left, right, deadLeft, deadRight, animAttackLeft,
-                animAttackRight, animStand);
+        super(animStand, animStand, animStand, animStand, animStand,
+                animStand, animStand);
     }
     
     public float getMaxSpeed() {
-        return 0.2f;
+        return 0.0f;
     }
     
     public void attack() {
-        bAttack = true;
+        bAttack = false;
     }
     
     public void update(long lElapsedTime){   // select the correct Animation
@@ -68,16 +60,16 @@ public class Minion extends Creature {
          
        
         // update the Animation
-        if(bMove == true){
-        if (animAnimation != newAnim ) {
-            animAnimation = newAnim;
-            animAnimation.start();
-        }
-        else {
+//        if(bMove == true){
+//        if (animAnimation != newAnim ) {
+//            animAnimation = newAnim;
+//            animAnimation.start();
+//        }
+//        else {
             animAnimation.update(lElapsedTime);
-        }
+//        }
         
-        }
+//        }
 
         // update to "dead" state
         lStateTime += lElapsedTime;
