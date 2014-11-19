@@ -454,6 +454,7 @@ public class ResourceManager {
         sprBorrego = new Minion(animBorrego[0], animBorrego[1],
             animBorregoDieLeft, animBorregoDieRight, animBorregoAttackLeft, 
                 animBorregoAttackRight, null);
+       // sprDuck1 = new Duck();
     }
 
 
