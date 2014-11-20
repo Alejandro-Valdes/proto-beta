@@ -38,23 +38,43 @@ public abstract class PowerUp extends Sprite {
 
 
     /**
-        PLayer needs ingredients. Gives the player points.
+        PLayer needs ingredients. Gives the player the oportunity to advance.
     */
-    public static class Gota extends PowerUp {
-        public Gota(Animation anim) {
+    public static class Frijol extends PowerUp {
+        public Frijol(Animation anim) {
+            super(anim);
+        }
+    }
+    
+        /**
+        PLayer needs ingredients. Gives the player the oportunity to advance.
+    */
+    public static class Salsa extends PowerUp {
+        public Salsa(Animation anim) {
+            super(anim);
+        }
+    }
+    
+        /**
+        PLayer needs ingredients. Gives the player the oportunity to advance.
+    */
+    public static class Queso extends PowerUp {
+        public Queso(Animation anim) {
+            super(anim);
+        }
+    }
+    
+        /**
+        PLayer needs ingredients. Gives the player the oportunity to advance.
+    */
+    public static class Tortilla extends PowerUp {
+        public Tortilla(Animation anim) {
             super(anim);
         }
     }
 
 
-    /**
-        A Music PowerUp. Changes the game music.
-    */
-    public static class Music extends PowerUp {
-        public Music(Animation anim) {
-            super(anim);
-        }
-    }
+    
 
 
     /**

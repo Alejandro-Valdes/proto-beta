@@ -32,7 +32,10 @@ public class ResourceManager {
     private Sprite sprGoal;
     private Sprite sprChicken;
     private Sprite sprBorrego;
-    private Sprite sprGota;
+    private Sprite sprFrijol;
+    private Sprite sprSalsa;
+    private Sprite sprQueso;
+    private Sprite sprTortilla;
     
     /**
         Creates a new ResourceManager with the specified
@@ -187,7 +190,19 @@ public class ResourceManager {
 
                 // check if the char represents a sprite
                 else if (ch == 'o') {
-                    addSprite(newMap, sprGota, x, y);
+                    addSprite(newMap, sprFrijol, x, y);
+                }
+                
+                else if(ch == '.') {
+                    addSprite(newMap, sprSalsa, x, y);
+                }
+                
+                else if(ch == ',') {
+                    addSprite(newMap, sprTortilla, x, y);
+                }
+                
+                else if(ch == '!') {
+                    addSprite(newMap, sprQueso, x, y);
                 }
 
                 else if (ch == '*') {
@@ -594,13 +609,31 @@ public class ResourceManager {
         anim.addFrame(loadImage("extras/Chilaquiles_puntos02.png"), 150);
         sprGoal = new PowerUp.Goal(anim);
 
-        // create "star" sprite
+        // create "frijol" sprite
         anim = new Animation();
-        anim.addFrame(loadImage("extras/gota1.png"), 100);
-        anim.addFrame(loadImage("extras/gota2.png"), 100);
-        anim.addFrame(loadImage("extras/gota3.png"), 100);
-        anim.addFrame(loadImage("extras/gota4.png"), 100);
-        sprGota = new PowerUp.Gota(anim);
+        anim.addFrame(loadImage("extras/frijol1.png"), 150);
+        anim.addFrame(loadImage("extras/frijol2.png"), 150);
+        anim.addFrame(loadImage("extras/frijol3.png"), 150);
+        sprFrijol = new PowerUp.Frijol(anim);
+        
+        // create "Tortilla" sprite
+        anim = new Animation();
+        anim.addFrame(loadImage("extras/tortilla1.png"), 150);
+        anim.addFrame(loadImage("extras/tortilla2.png"), 150);
+        sprTortilla = new PowerUp.Tortilla(anim);
 
+        // create "salsa" sprite
+        anim = new Animation();
+        anim.addFrame(loadImage("extras/salsa1.png"), 150);
+        anim.addFrame(loadImage("extras/salsa2.png"), 150);
+        anim.addFrame(loadImage("extras/salsa3.png"), 150);
+        sprSalsa = new PowerUp.Salsa(anim);
+        
+        // create "queso" sprite
+        anim = new Animation();
+        anim.addFrame(loadImage("extras/queso1.png"), 150);
+        anim.addFrame(loadImage("extras/queso2.png"), 150);
+        anim.addFrame(loadImage("extras/queso3.png"), 150);
+        sprQueso = new PowerUp.Queso(anim);
     }
 }

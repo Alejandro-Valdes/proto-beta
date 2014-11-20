@@ -3,14 +3,16 @@
 # The tiles are:
 #   (Space) Empty tile
 #   A..Z    Tiles A through Z
-#   o       Star
-#   !       Music Note
+#   o       Frijol
+#   !       Salsa
+#   ,	    Tortilla
+#   .       Queso
 #   *       Goal
-#   1       Bad Guy 1 (grub)
-#   2       Bad Guy 2 (fly)
+#   1       Gallinas
+#   2       Borregos
                                                                  
                    
       
                                                      
-        EF  1            1            2            EAF     * 2
+        EF  1            1            2    o  ! , .EAF     * 2
 BBBBBBBBGHBBBBBBBGHBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBGAAHBBBBBBBBBBB

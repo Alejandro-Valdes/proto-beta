@@ -57,6 +57,7 @@ public class GameManager extends GameCore {
     private int iContVida;      //timer to know when to substract life
     private int iContAttack;    //each attack lasts 1 secnod
     private boolean bAttack;    //is player attacking
+    private int iIngredientes;      //numbre of ingredients needed
     
     /**
      * init initializes all my variables
@@ -75,6 +76,7 @@ public class GameManager extends GameCore {
         renderer = new TileMapRenderer();
         
         //Level manegement
+        iIngredientes = 4;
         iLevel = 0;
         iContTime = 0;
         iLife = 10;
@@ -263,10 +265,7 @@ public class GameManager extends GameCore {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Verdana", Font.BOLD, 40));
             g.drawString("LIFE: " + iLife +"%", screen.getWidth() - 240,
-                     50);
-            g.drawString(""+bAttack, screen.getWidth() - 240,
-                     100);
-            
+                     50);          
         }
         
         if(bPause) {
@@ -595,21 +594,29 @@ public class GameManager extends GameCore {
     */
     public void acquirePowerUp(PowerUp powerUp) {
         // remove it from the map
-        map.removeSprite(powerUp);
 
         if (powerUp instanceof PowerUp.Goal) {
             // advance to next map
-            if(iLevel < 4){
-                iLevel++;
+            if(iIngredientes ==0) {
+                if(iLevel < 4){
+                    iLevel++;
+                    iIngredientes = 4;  //necesito otros 4 ingredientes otra vez
+                }
+                else {
+                    map.removeSprite(powerUp);
+                    iLevel = 1;
+                    resourceManager.setiCurrentMap(2);
+                    iIngredientes = 4;
+                }
+                map = resourceManager.loadNextMap();
+                renderer.setBackground(iLevel);
             }
-            else {
-                iLevel = 1;
-                resourceManager.setiCurrentMap(2);
-            }
-            map = resourceManager.loadNextMap();
-            renderer.setBackground(iLevel);
         }
+        else {
+            iIngredientes--;
+            map.removeSprite(powerUp);
+        }
+            
     }
-
 }
 

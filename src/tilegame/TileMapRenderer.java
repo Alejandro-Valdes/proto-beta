@@ -17,7 +17,7 @@ import tilegame.sprites.Creature;
 /**
  * TileMapRenderer
  * 
- * draws a setting using the map.txt
+ * draws a setting using the map
  */
 public class TileMapRenderer {
     private static final int I_TILE_SIZE = 64;
