@@ -5,10 +5,18 @@ import javax.swing.ImageIcon;
 
 import graphics.ScreenManager;
 
+
+/**
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
+ */
+
 /**
  *Simple abstract class used for testing. Subclasses 
  * should implement the draw() method.
- * @author Alejandro Valdes
  */
 public abstract class GameCore {
     protected static final int I_FONT_SIZE = 24;

@@ -8,8 +8,15 @@ package tilegame.sprites;
 import graphics.Animation;
 
 /**
- *
- * @author Alejandro Valdes
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
+ */
+
+/**
+ * Minion class for all the bad guys
  */
 public class Minion extends Creature {
         
@@ -29,6 +36,10 @@ public class Minion extends Creature {
         bAttack = true;
     }
     
+    /**
+     * Selects the correct animation
+     * @param lElapsedTime 
+     */
     public void update(long lElapsedTime){   // select the correct Animation
         Animation newAnim = animAnimation;
         

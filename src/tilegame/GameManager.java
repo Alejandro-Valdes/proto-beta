@@ -12,6 +12,14 @@ import test.GameCore;
 import tilegame.sprites.*;
 
 /**
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
+ */
+
+/**
     GameManager manages all parts of the game.
 */
 public class GameManager extends GameCore {
@@ -27,26 +35,32 @@ public class GameManager extends GameCore {
     public static final float GRAVITY = 0.002f;
 
     private Point pointCache = new Point();
-    private TileMap map;
-    private ResourceManager resourceManager;;
-    private InputManager inputManager;
+    private TileMap map;  //map we'll use
+    private ResourceManager resourceManager;
+    private InputManager inputManager; 
     private TileMapRenderer renderer;
 
-    private GameAction moveLeft;
+    private GameAction moveLeft;  //GmeAct to move
     private GameAction moveRight;
-    private GameAction jump;
-    private GameAction exit;
-    private GameAction pause;
-    private GameAction next;
+    private GameAction jump;    //GmeAct to jump
+    private GameAction exit;    //GmeAct to ext
+    private GameAction pause;   //GmeAct to pause
+    private GameAction next;    //GmeAct to begin
+    private GameAction attack;  //GmeAct to attack
 
-    private boolean bCanMoveR;
-    private boolean bCanMoveL;
-    private boolean bPause;
-    private int iLevel;
-    private int iContTime;
-    private int iVida;
-    private int iContVida;
-
+    private boolean bCanMoveR;  //can i move right
+    private boolean bCanMoveL;  //can i move left
+    private boolean bPause;     //am i paused
+    private int iLevel;     //which level am i in
+    private int iContTime;      //timer for loading
+    private int iLife;      //life percentage
+    private int iContVida;      //timer to know when to substract life
+    private int iContAttack;    //each attack lasts 1 secnod
+    private boolean bAttack;    //is player attacking
+    
+    /**
+     * init initializes all my variables
+     */
     public void init() {
         super.init();
 
@@ -59,12 +73,16 @@ public class GameManager extends GameCore {
 
         // load resources
         renderer = new TileMapRenderer();
+        
+        //Level manegement
         iLevel = 0;
         iContTime = 0;
-        iVida = 10;
+        iLife = 10;
         iContVida = 0;
+        iContAttack = 0;
+        bAttack = false;
         
-        
+        //Adds all my backgrounds
         renderer.addBackground(
             resourceManager.loadImage("backgrounds/valkyrie.png"));
         
@@ -95,84 +113,133 @@ public class GameManager extends GameCore {
     }
 
 
+    /**
+     * initializes the input that'll be used
+     */
     private void initInput() {
+        //i can move
         bCanMoveR = true;
         bCanMoveL = true;
+        //not pause
         bPause = false;
+        //Creation of all the game actions
         moveLeft = new GameAction("moveLeft");
         moveRight = new GameAction("moveRight");
         jump = new GameAction("jump",
-            GameAction.I_DETECT_INITIAL_PRESS_ONLY);
+                GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         exit = new GameAction("exit",
-            GameAction.I_DETECT_INITIAL_PRESS_ONLY);
+                GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         pause = new GameAction("pause", 
-            GameAction.I_DETECT_INITIAL_PRESS_ONLY);
+                GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         next = new GameAction("next");
+        attack = new GameAction("attack",
+                GameAction.I_DETECT_INITIAL_PRESS_ONLY);
+        
         
         inputManager = new InputManager(
             screen.getFullScreenWindow());
         inputManager.setCursor(InputManager.INVISIBLE_CURSOR);
 
+        //Mapping of gameActions to keys
         inputManager.mapToKey(moveLeft, KeyEvent.VK_LEFT);
         inputManager.mapToKey(moveRight, KeyEvent.VK_RIGHT);
         inputManager.mapToKey(jump, KeyEvent.VK_SPACE);
         inputManager.mapToKey(exit, KeyEvent.VK_ESCAPE);
         inputManager.mapToKey(pause, KeyEvent.VK_P);
         inputManager.mapToKey(next, KeyEvent.VK_S);
+        inputManager.mapToKey(attack, KeyEvent.VK_A);
         
     }
 
+    /**
+     * Checks for pause and exit
+     * can  be used even out of pause
+     * @param elapsedTime 
+     */
     private void checkSystemInput(long elapsedTime) {
         
         if(pause.isPressed()){
             bPause = false; 
             pause.reset();
         }
+        
+        if (exit.isPressed()) {
+                stop();
+        }
     }
 
+    /**
+     * Checks all the input of the keyboard
+     * @param elapsedTime 
+     */
     private void checkInput(long elapsedTime) {
             
-            if (exit.isPressed()) {
-                stop();
+        if (exit.isPressed()) {
+            stop();
+        }
+
+        if(next.isPressed() && iLevel == 1) {
+            iLevel++;
+            renderer.setBackground(iLevel);     //chance background   
+        }
+
+        //Moves the player around
+        Player player = (Player)map.getPlayer();
+        if (player.isAlive()) {
+            float velocityX = 0;
+            
+            if(bCanMoveL){
+                if (moveLeft.isPressed()) {
+                    velocityX-=player.getMaxSpeed();
+                }
             }
 
-            if(next.isPressed() && iLevel == 1) {
-                iLevel++;
-                renderer.setBackground(iLevel);        
+            if(bCanMoveR){
+                if (moveRight.isPressed()) {
+                    velocityX+=player.getMaxSpeed();
+                }
             }
 
-            Player player = (Player)map.getPlayer();
-            if (player.isAlive()) {
-                float velocityX = 0;
+            if (pause.isPressed()) {
+                bPause = true;
+                pause.reset();
+            }
 
-                if(bCanMoveL){
-                    if (moveLeft.isPressed()) {
-                        velocityX-=player.getMaxSpeed();
-                    }
-                }
+            if (jump.isPressed()) {
+                player.jump(false);
+                bCanMoveR = true;
+                bCanMoveL = true;
+            }
 
-                if(bCanMoveR){
-                    if (moveRight.isPressed()) {
-                        velocityX+=player.getMaxSpeed();
-                    }
+            if(attack.isPressed()) {
+                player.setAttack();
+                bAttack = true;
+                iContAttack++;
+               
+            }
+            else {
+                if(iContAttack > 40) {
+                    player.stopAttack();
+                    iContAttack = 0;
+                    attack.reset();
+                    bAttack = false;
+                    
                 }
-                
-                if (pause.isPressed()) {
-                    bPause = true;
-                    pause.reset();
+                else if (iContAttack > 0) {
+                    iContAttack++;
                 }
+            }
 
-                if (jump.isPressed()) {
-                    player.jump(false);
-                    bCanMoveR = true;
-                    bCanMoveL = true;
-                }
-
-                player.setVelocityX(velocityX);
+            player.setVelocityX(velocityX);
             }
     }
 
+    
 
+    /**
+     * draws basic info on the screen
+     * @param g 
+     */
     public void draw(Graphics2D g) {
         renderer.draw(g, map,
             screen.getWidth(), screen.getHeight());
@@ -194,9 +261,12 @@ public class GameManager extends GameCore {
         
         else if(iLevel > 1) {
             g.setColor(Color.WHITE);
-            g.setFont(new Font("TimesRoman", Font.BOLD, 40));
-            g.drawString("LIFE: " + iVida , screen.getWidth() - 200,
+            g.setFont(new Font("Verdana", Font.BOLD, 40));
+            g.drawString("LIFE: " + iLife +"%", screen.getWidth() - 240,
                      50);
+            g.drawString(""+bAttack, screen.getWidth() - 240,
+                     100);
+            
         }
         
         if(bPause) {
@@ -315,6 +385,7 @@ public class GameManager extends GameCore {
     public void update(long elapsedTime) {
         Creature player = (Creature)map.getPlayer();
         
+        //for our loading screen
         if(iLevel == 0 && iContTime < 120) {
             iContTime++;
         }
@@ -329,8 +400,8 @@ public class GameManager extends GameCore {
             //map = resourceManager.reloadMap();
             iLevel = 1;
             renderer.setBackground(iLevel);
-            iVida = 10;
-            resourceManager.setiCurrentMap(2);
+            iLife = 10;
+            resourceManager.setiCurrentMap(0);
             map = resourceManager.loadNextMap();
             bCanMoveL = true;
             bCanMoveR = true;
@@ -461,27 +532,23 @@ public class GameManager extends GameCore {
         else if (collisionSprite instanceof Creature) {
             Creature badguy = (Creature)collisionSprite;
             
+            //if a second has gone by decrease life
             if(iContVida<30){
                 iContVida++;
             }
             else{
                 iContVida = 0;
-                iVida -= 5;
+                iLife -= 5;
             }
-            if(iVida <= 0) {
-                player.setState(Creature.I_STATE_DYING);
+            //im dead
+            if(iLife <= 0) {
+                player.setState(Creature.I_STATE_DEAD);
             }
-            if (canKill) {
-                // kill the badguy and make player bounce
-                badguy.setState(Creature.I_STATE_DYING);
-                player.setY(badguy.getY() - player.getHeight());
-                bCanMoveR = true;
-                bCanMoveL = true;
-                player.jump(true);
-                
-            }
-            else if (player.bOnGround){
-                // player dies!
+
+            /*if the player is on the ground he can only move the oposite 
+            direction*/
+            
+            if (player.bOnGround){
                 
                 player.setVelocityX(0);
                 if(badguy.getX() > player.getX()) {
@@ -494,13 +561,28 @@ public class GameManager extends GameCore {
                     bCanMoveL = false;
 
                 }
-                
-                
+               
                 badguy.setAttack();
             }
             
             else {
                 badguy.stopAttack();
+            }
+            
+            if (canKill || bAttack) {
+                
+                if(canKill) {
+                    // kill the badguy and make player bounce
+                    player.setY(badguy.getY() - player.getHeight());
+                    player.jump(true);
+                }
+                
+                badguy.setState(Creature.I_STATE_DYING);
+                //I can move again
+                bCanMoveR = true;
+                bCanMoveL = true;
+                iContVida = 0;    
+                
             }
             
         }

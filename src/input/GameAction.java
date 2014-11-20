@@ -1,11 +1,19 @@
 package input;
 
+
+/**
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
+ */
+
 /**
  *The GameAction class is an abstract to a user-initiated
  *action, like jumping or moving. GameActions can be mapped
  *to keys 
  * 
- * @author Alejandro Valdes
  */
 public class GameAction {
     /**

@@ -4,7 +4,16 @@ import java.lang.reflect.Constructor;
 import graphics.*;
 
 /**
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
+ */
+
+/**
     A PowerUp class is a Sprite that the player can pick up.
+    * Here we'll have our ingredients for chilaquiles.
 */
 public abstract class PowerUp extends Sprite {
 
@@ -29,7 +38,7 @@ public abstract class PowerUp extends Sprite {
 
 
     /**
-        A Star PowerUp. Gives the player points.
+        PLayer needs ingredients. Gives the player points.
     */
     public static class Gota extends PowerUp {
         public Gota(Animation anim) {

@@ -7,8 +7,17 @@ import java.util.Iterator;
 import tilegame.sprites.Creature;
 
 /**
- *
- * @author Alejandro Valdes
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
+ */
+
+/**
+ * TileMapRenderer
+ * 
+ * draws a setting using the map.txt
  */
 public class TileMapRenderer {
     private static final int I_TILE_SIZE = 64;
