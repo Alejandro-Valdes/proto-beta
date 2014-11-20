@@ -201,7 +201,7 @@ public class GameManager extends GameCore {
             iIngredientes = 4;
             iLevel = 3;
             iContTime = 0;
-            iLife = 10;
+            iLife = 100;
             iContVida = 0;
             iContAttack = 0;
             bAttack = false;
@@ -302,7 +302,17 @@ public class GameManager extends GameCore {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Verdana", Font.BOLD, 40));
             g.drawString("LIFE: " + iLife +"%", screen.getWidth() - 240,
-                     50);         
+                     50);
+            if(iIngredientes > 0){
+                g.setFont(new Font("Verdana",Font.PLAIN, 20));
+                g.drawString("INGREDIENTS 2 GO: " + iIngredientes, 
+                        screen.getWidth() - 240, 100);
+            }
+            else {
+                g.setFont(new Font("Verdana",Font.PLAIN, 20));
+                g.drawString("GET TO THE CHILAQUILES", 
+                        screen.getWidth() - 265, 100);
+            }
         }
         
         // si el jugador esta pidiendo tutorial
