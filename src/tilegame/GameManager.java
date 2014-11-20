@@ -330,6 +330,13 @@ public class GameManager extends GameCore {
             g.drawImage(image, 0, 0, null);
         }   
         
+        else if(iLevel > 1 && !bLost) {
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Verdana", Font.BOLD, 40));
+            g.drawString("LIFE: " + iLife +"%", screen.getWidth() - 240,
+                     50);          
+        }
+        
         if(bPause) {
             g.setColor(Color.black);
             g.setFont(new Font("TimesRoman", Font.BOLD, 60));
@@ -618,6 +625,19 @@ public class GameManager extends GameCore {
             if(iLife <= 0) {
                 player.setState(Minion.I_STATE_DEAD);
             }
+            
+            //if a second has gone by decrease life
+            if(iContVida<30){
+                iContVida++;
+            }
+            else{
+                iContVida = 0;
+                iLife -= 5;
+            }
+            //im dead
+            if(iLife <= 0) {
+                player.setState(Minion.I_STATE_DEAD);
+            }
 
             /*if the player is on the ground he can only move the oposite 
             direction*/
@@ -652,6 +672,7 @@ public class GameManager extends GameCore {
                 }
                 
                 badguy.setState(Minion.I_STATE_DYING);
+
                 //I can move again
                 bCanMoveR = true;
                 bCanMoveL = true;

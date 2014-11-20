@@ -8,7 +8,6 @@
 #   ,	    Tortilla
 #   .       Queso
 #   *       Goal
-<<<<<<< HEAD
 #   1       Gallinas
 #   2       Borregos
 #   3       Tutorial Duck                                                              
