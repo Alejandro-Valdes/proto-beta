@@ -47,10 +47,12 @@ public class GameManager extends GameCore {
     private GameAction pause;   //GmeAct to pause
     private GameAction next;    //GmeAct to begin
     private GameAction attack;  //GmeAct to attack
+    private GameAction restart; //GameAct to restart
 
     private boolean bCanMoveR;  //can i move right
     private boolean bCanMoveL;  //can i move left
     private boolean bPause;     //am i paused
+    private boolean bLost;
     private int iLevel;     //which level am i in
     private int iContTime;      //timer for loading
     private int iLife;      //life percentage
@@ -83,22 +85,26 @@ public class GameManager extends GameCore {
         iContVida = 0;
         iContAttack = 0;
         bAttack = false;
+        bLost = false;
         
         //Adds all my backgrounds
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/valkyrie.png"));
+            resourceManager.loadImage("backgrounds/valkyrie.png")); //0
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/Menu.png"));
+            resourceManager.loadImage("backgrounds/Menu.png")); //1
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/tutorial.png"));
+            resourceManager.loadImage("backgrounds/tutorial.png"));  //2
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/level1.png"));
+            resourceManager.loadImage("backgrounds/level1.png")); //3
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/level2.png"));
+            resourceManager.loadImage("backgrounds/level2.png")); //4
+        
+        renderer.addBackground(
+            resourceManager.loadImage("backgrounds/YOULOSE.jpg")); //5
         
         renderer.setBackground(iLevel);
 
@@ -136,6 +142,8 @@ public class GameManager extends GameCore {
         next = new GameAction("next");
         attack = new GameAction("attack",
                 GameAction.I_DETECT_INITIAL_PRESS_ONLY);
+        restart = new GameAction("restart", 
+                GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         
         
         inputManager = new InputManager(
@@ -149,7 +157,8 @@ public class GameManager extends GameCore {
         inputManager.mapToKey(exit, KeyEvent.VK_ESCAPE);
         inputManager.mapToKey(pause, KeyEvent.VK_P);
         inputManager.mapToKey(next, KeyEvent.VK_S);
-        inputManager.mapToKey(attack, KeyEvent.VK_A);
+        inputManager.mapToKey(attack, KeyEvent.VK_Z);
+        inputManager.mapToKey(restart, KeyEvent.VK_R);
         
     }
 
@@ -178,6 +187,29 @@ public class GameManager extends GameCore {
             
         if (exit.isPressed()) {
             stop();
+        }
+        
+        if(restart.isPressed() && bLost) {
+            //UN TIPO DE INIT()
+            //Level manegement
+            iIngredientes = 4;
+            iLevel = 3;
+            iContTime = 0;
+            iLife = 10;
+            iContVida = 0;
+            iContAttack = 0;
+            bAttack = false;
+            bLost = false;
+            //i can move
+            bCanMoveR = true;
+            bCanMoveL = true;
+            //not pause
+            bPause = false;
+            renderer.setBackground(iLevel);
+            resourceManager.setiCurrentMap(1);
+            map = resourceManager.loadNextMap();
+
+            restart.reset();            
         }
 
         if(next.isPressed() && iLevel == 1) {
@@ -261,7 +293,7 @@ public class GameManager extends GameCore {
             
         }
         
-        else if(iLevel > 1) {
+        else if(iLevel > 1 && !bLost) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Verdana", Font.BOLD, 40));
             g.drawString("LIFE: " + iLife +"%", screen.getWidth() - 240,
@@ -272,6 +304,13 @@ public class GameManager extends GameCore {
             g.setFont(new Font("TimesRoman", Font.BOLD, 60));
             g.drawString("PAUSE" , screen.getWidth() / 2 - 200,
                      200);
+        }
+        
+        if(bLost) {
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Verdana", Font.BOLD, 40));
+            g.drawString("R to RESTART", screen.getWidth()/ 2 - 150,
+                     250);      
         }
     }
 
@@ -385,7 +424,7 @@ public class GameManager extends GameCore {
         Creature player = (Creature)map.getPlayer();
         
         //for our loading screen
-        if(iLevel == 0 && iContTime < 120) {
+        if(iLevel == 0 && iContTime < 50) {
             iContTime++;
         }
         else if(iLevel == 0){
@@ -397,14 +436,12 @@ public class GameManager extends GameCore {
         // player is dead! start map over
         if (player.getState() == Creature.I_STATE_DEAD) {
             //map = resourceManager.reloadMap();
-            iLevel = 1;
+            iLevel = 5;  //El You lose
             renderer.setBackground(iLevel);
-            iLife = 10;
-            resourceManager.setiCurrentMap(0);
-            map = resourceManager.loadNextMap();
-            bCanMoveL = true;
-            bCanMoveR = true;
-            return;
+            bLost = true;
+            // get keyboard/mouse input
+            checkInput(elapsedTime);
+            //return;
         }
         
         if(bPause) {

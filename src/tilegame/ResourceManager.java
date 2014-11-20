@@ -90,7 +90,7 @@ public class ResourceManager {
             image.getHeight(null),
             Transparency.BITMASK);
 
-        // draw the transformed image
+        //  the transformed image
         Graphics2D g = (Graphics2D)newImage.getGraphics();
         g.drawImage(image, transform, null);
         g.dispose();
