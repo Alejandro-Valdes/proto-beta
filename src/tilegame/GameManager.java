@@ -195,10 +195,27 @@ public class GameManager extends GameCore {
             
         }
         
+        // si el jugador esta pidiendo tutorial
         if (bTutLabel) {
+            // Obteniendo el jugador
             Player player = (Player)map.getPlayer();
-            g.drawString("X: " + Float.toString(player.getX()) , screen.getWidth() / 2 - 110, 270);
-            Image image = resourceManager.loadImage("extras/pato_instrucciones_01.png");
+            
+            // declarando imagen inicial
+            Image image = resourceManager.loadImage("extras/pato_agarrachilaquiles.png");
+            
+            // checando en que posicion del mapa tutorial esta el personaje para saber
+            // que consejo del pato desplegar
+            if (player.getX() > 3200) {
+                image = resourceManager.loadImage("extras/pato_agarrachilaquiles.png");
+            } else if (player.getX() > 1700) {
+                image = resourceManager.loadImage("extras/pato_enemigosmasgrandes.png");
+            } else if (player.getX() > 900) {
+                image = resourceManager.loadImage("extras/pato_instrucciones_02.png");
+            } else {
+                image = resourceManager.loadImage("extras/pato_instrucciones_01.png");
+            }
+            
+            // pinta la imagen en un rectangulo de su tamaño
             g.fillRect(0, 0, 800, 180);
             g.drawImage(image, 0, 0, null);
         }
@@ -489,11 +506,11 @@ public class GameManager extends GameCore {
             }
             
         }
+        // checa si el jugador pide el tutorial al colisionar con un pato
         else if (collisionSprite instanceof Duck) {
-            bTutLabel = true;
-        }
-        else {
-            bTutLabel = false;
+            bTutLabel = true;  // prende la boleana
+        } else {
+            bTutLabel = false; // apaga la boleana
         }
 
     }
