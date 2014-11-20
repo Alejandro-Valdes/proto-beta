@@ -4,10 +4,13 @@ import graphics.*;
 import input.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.ImageObserver;
+import java.net.URL;
 import java.util.Iterator;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.sampled.AudioFormat;
+import javax.swing.ImageIcon;
 import test.GameCore;
 import tilegame.sprites.*;
 
@@ -44,6 +47,7 @@ public class GameManager extends GameCore {
     private boolean bCanMoveR;
     private boolean bCanMoveL;
     private boolean bPause;
+    private boolean bTutLabel;
     private int iLevel;
     private int iContTime;
 
@@ -61,6 +65,7 @@ public class GameManager extends GameCore {
         renderer = new TileMapRenderer();
         iLevel = 0;
         iContTime = 0;
+        bTutLabel = false;
         
         
         renderer.addBackground(
@@ -190,7 +195,16 @@ public class GameManager extends GameCore {
             
         }
         
+        if (bTutLabel) {
+            Player player = (Player)map.getPlayer();
+            g.drawString("X: " + Float.toString(player.getX()) , screen.getWidth() / 2 - 110, 270);
+            Image image = resourceManager.loadImage("extras/pato_instrucciones_01.png");
+            g.fillRect(0, 0, 800, 180);
+            g.drawImage(image, 0, 0, null);
+        }
+        
         if(bPause) {
+            g.setColor(Color.black);
             g.setFont(new Font("TimesRoman", Font.BOLD, 60));
             g.drawString("PAUSE" , screen.getWidth() / 2 - 200,
                      200);
@@ -430,8 +444,7 @@ public class GameManager extends GameCore {
         canKill is true, collisions with Creatures will kill
         them.
     */
-    public void checkPlayerCollision(Player player,
-        boolean canKill)
+    public void checkPlayerCollision(Player player, boolean canKill)
     {
         if (!player.isAlive()) {
             return;
@@ -442,11 +455,11 @@ public class GameManager extends GameCore {
         if (collisionSprite instanceof PowerUp) {
             acquirePowerUp((PowerUp)collisionSprite);
         }
-        else if (collisionSprite instanceof Creature) {
-            Creature badguy = (Creature)collisionSprite;
+        else if (collisionSprite instanceof Minion) {
+            Minion badguy = (Minion)collisionSprite;
             if (canKill) {
                 // kill the badguy and make player bounce
-                badguy.setState(Creature.I_STATE_DYING);
+                badguy.setState(Minion.I_STATE_DYING);
                 player.setY(badguy.getY() - player.getHeight());
                 bCanMoveR = true;
                 bCanMoveL = true;
@@ -476,6 +489,13 @@ public class GameManager extends GameCore {
             }
             
         }
+        else if (collisionSprite instanceof Duck) {
+            bTutLabel = true;
+        }
+        else {
+            bTutLabel = false;
+        }
+
     }
 
 
