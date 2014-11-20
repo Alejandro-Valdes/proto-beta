@@ -4,6 +4,15 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 /**
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
+ */
+
+
+/**
     The LoopingByteInputStream is a ByteArrayInputStream that
     loops indefinitly. The looping stops when the close() method
     is called.

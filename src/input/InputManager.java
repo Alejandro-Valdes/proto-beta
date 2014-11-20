@@ -5,10 +5,18 @@ import java.awt.event.*;
 import java.util.List;
 import java.util.ArrayList;
 
+
+/**
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
+ */
+
 /**
  * The InputManager manages input of key events.
  * Events are mapped to GameActions.
- * @author Alejandro Valdes
  */
 public class InputManager implements KeyListener
 {

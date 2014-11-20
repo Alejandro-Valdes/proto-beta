@@ -3,8 +3,16 @@ package tilegame.sprites;
 import graphics.Animation;
 
 /**
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
+ */
+
+/**
  * 
- * The Player.
+ * The Player, extends Creature
 */
 public class Player extends Creature {
 
@@ -23,12 +31,14 @@ public class Player extends Creature {
                 animAttackLeft, animAttackRight, animStand);
     }
 
-
     public void collideHorizontal() {
         setVelocityX(0);
     }
 
 
+    /**
+     * Checks if collides with ground
+     */
     public void collideVertical() {
         // check if collided with ground
         if (getVelocityY() > 0) {
@@ -38,6 +48,10 @@ public class Player extends Creature {
     }
 
 
+    /**
+     * Sets the y parameter
+     * @param y 
+     */
     public void setY(float y) {
         // check if falling
         if (Math.round(y) > Math.round(getY())) {
@@ -51,6 +65,9 @@ public class Player extends Creature {
         // do nothing
     }
     
+    /**
+     * Allows the player to stand in one place
+     */
     public void stand(){
         if(getVelocityX()== 0){
         bMove = false;
@@ -64,6 +81,7 @@ public class Player extends Creature {
     /**
         Makes the player jump if the player is on the ground or
         if forceJump is true.
+     * @param bForceJump makes the player jump
     */
     public void jump(boolean bForceJump) {
         if (bOnGround || bForceJump) {
@@ -73,10 +91,18 @@ public class Player extends Creature {
     }
 
 
+    /**
+     * returns the max speed of the player
+     * @return 
+     */
     public float getMaxSpeed() {
         return 0.25f;
     }
     
+    /**
+     * updates to selece the correct animation
+     * @param lElapsedTime 
+     */
     public void update(long lElapsedTime){   // select the correct Animation
         Animation newAnim = animAnimation;
         if (getVelocityX() < 0) {
@@ -89,6 +115,13 @@ public class Player extends Creature {
         else {
             newAnim = animStand;
         }
+        
+        if (getVelocityX() < 0&& bAttack) {
+            newAnim = animAttackLeft;
+        }
+        else if (getVelocityX() >= 0 && bAttack) {
+            newAnim = animAttackRight;
+        } 
         
         if (iState == I_STATE_DYING && newAnim == animLeft) {
             newAnim = animDeadLeft;
@@ -122,6 +155,7 @@ public class Player extends Creature {
 
     @Override
     public void attack() {
+        bAttack = true;
     }
 
 }

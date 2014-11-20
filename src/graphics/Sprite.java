@@ -2,9 +2,17 @@ package graphics;
 
 import java.awt.Image;
 
+
 /**
- *
- * @author Alejandro Valdes
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
+ */
+
+/**
+ * Class Sprite used to create new sprite animations
  */
 public class Sprite {
     protected Animation animAnimation;

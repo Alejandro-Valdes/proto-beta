@@ -7,9 +7,17 @@ import java.util.Iterator;
 import graphics.Sprite;
 
 /**
- *
- * @author Alejandro Valdes
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
  */
+
+/**
+ * TileMap manages the tile map
+ * 
+ * */
 public class TileMap {
     
     private Image[][] imaTiles;

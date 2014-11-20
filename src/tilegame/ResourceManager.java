@@ -10,6 +10,14 @@ import graphics.*;
 import tilegame.sprites.*;
 
 /**
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
+ */
+
+/**
     The ResourceManager class loads and manages tile Images and
     "host" Sprites used in the game. Game Sprites are cloned from
     "host" Sprites.
@@ -25,7 +33,10 @@ public class ResourceManager {
     private Sprite sprChicken;
     private Sprite sprDuck1;
     private Sprite sprBorrego;
-    private Sprite sprGota;
+    private Sprite sprFrijol;
+    private Sprite sprSalsa;
+    private Sprite sprQueso;
+    private Sprite sprTortilla;
     
     /**
         Creates a new ResourceManager with the specified
@@ -46,11 +57,20 @@ public class ResourceManager {
         return new ImageIcon(filename).getImage();
     }
     
+    /**
+     * Gets the reflection of an image
+     * @param image
+     * @return reflected image
+     */
     public Image getMirrorImage(Image image) {
         return getScaledImage(image, -1, 1);
     }
 
-
+    /**
+     * Gets a flipped image
+     * @param image
+     * @return flipped image
+     */
     public Image getFlippedImage(Image image) {
         return getScaledImage(image, 1, -1);
     }
@@ -71,7 +91,7 @@ public class ResourceManager {
             image.getHeight(null),
             Transparency.BITMASK);
 
-        // draw the transformed image
+        //  the transformed image
         Graphics2D g = (Graphics2D)newImage.getGraphics();
         g.drawImage(image, transform, null);
         g.dispose();
@@ -79,10 +99,18 @@ public class ResourceManager {
         return newImage;
     }
     
+    /**
+     * sets the index for the current map
+     * @param iI is the index
+     */
     public void setiCurrentMap(int iI) {
         iCurrentMap = iI;
     }
     
+    /**
+     * Loads the next map available
+     * @return new map
+     */
     public TileMap loadNextMap() {
         TileMap map = null;
         while (map == null) {
@@ -104,7 +132,6 @@ public class ResourceManager {
         return map;
     }
 
-
     public TileMap reloadMap() {
         try {
             return loadMap(
@@ -117,6 +144,12 @@ public class ResourceManager {
     }
 
 
+    /**
+     * Loads an especific map
+     * @param filename
+     * @return map
+     * @throws IOException 
+     */
     private TileMap loadMap(String filename)
         throws IOException
     {
@@ -158,7 +191,19 @@ public class ResourceManager {
 
                 // check if the char represents a sprite
                 else if (ch == 'o') {
-                    addSprite(newMap, sprGota, x, y);
+                    addSprite(newMap, sprFrijol, x, y);
+                }
+                
+                else if(ch == '.') {
+                    addSprite(newMap, sprSalsa, x, y);
+                }
+                
+                else if(ch == ',') {
+                    addSprite(newMap, sprTortilla, x, y);
+                }
+                
+                else if(ch == '!') {
+                    addSprite(newMap, sprQueso, x, y);
                 }
 
                 else if (ch == '*') {
@@ -187,6 +232,13 @@ public class ResourceManager {
     }
 
 
+    /**
+     * Adds new sprite to the map
+     * @param map
+     * @param hostSprite
+     * @param tileX
+     * @param tileY 
+     */
     private void addSprite(TileMap map,
         Sprite hostSprite, int tileX, int tileY)
     {
@@ -215,6 +267,9 @@ public class ResourceManager {
     // -----------------------------------------------------------
 
 
+    /**
+     * Load tiles
+     */
     public void loadTileImages() {
         // keep looking for tile A,B,C, etc. this makes it
         // easy to drop new tiles in the images/ directory
@@ -231,19 +286,21 @@ public class ResourceManager {
         }
     }
 
-
+    /**
+     * load creature sprites
+     */
     public void loadCreatureSprites() {
 
         Image[][] images = new Image[6][];
 
         // load left-facing images
         images[0] = new Image[] {
-            loadImage("player/Hero Sprite Running_01.png"),
-            loadImage("player/Hero Sprite Running_02.png"),
-            loadImage("player/Hero Sprite Running_03.png"),
-            loadImage("player/Hero Sprite Running_04.png"),
-            loadImage("player/Hero Sprite Running_05.png"),
-            loadImage("player/Hero Sprite Running_06.png"),
+            loadImage("player/Hero_Sprite_Running_01.png"),
+            loadImage("player/Hero_Sprite_Running_02.png"),
+            loadImage("player/Hero_Sprite_Running_03.png"),
+            loadImage("player/Hero_Sprite_Running_04.png"),
+            loadImage("player/Hero_Sprite_Running_05.png"),
+            loadImage("player/Hero_Sprite_Running_06.png"),
             loadImage("gallinas/gallina_zombie_run_01.png"),
             loadImage("gallinas/gallina_zombie_run_02.png"),
             loadImage("gallinas/gallina_zombie_run_03.png"),
@@ -312,6 +369,28 @@ public class ResourceManager {
                 loadImage("player/Hero Sprite Idle_00.png"), 150);
         animPlayerStand.addFrame(
                 loadImage("player/Hero Sprite Idle_01.png"), 150);
+        //Termina Heroe Parado
+        
+        //Ataque Heroe
+        Animation animPlayerAttackRight = new Animation();
+        animPlayerAttackRight.addFrame(
+                loadImage("player/Hero_Sprite_Attacking_01.png"), 150);
+        animPlayerAttackRight.addFrame(
+                loadImage("player/Hero_Sprite_Attacking_02.png"), 150);
+        animPlayerAttackRight.addFrame(
+                loadImage("player/Hero_Sprite_Attacking_03.png"), 150);
+        
+        Animation animPlayerAttackLeft = new Animation();
+        animPlayerAttackLeft.addFrame(
+                getMirrorImage(loadImage
+                    ("player/Hero_Sprite_Attacking_01.png")), 150);
+        animPlayerAttackLeft.addFrame(
+                getMirrorImage(loadImage
+                    ("player/Hero_Sprite_Attacking_02.png")), 150);
+        animPlayerAttackLeft.addFrame(
+                getMirrorImage(loadImage
+                    ("player/Hero_Sprite_Attacking_03.png")), 150);
+        //Termina ataque Heroe
         
         //Ataque gallina
         Animation animChickenAttackLeft = new Animation();
@@ -338,6 +417,7 @@ public class ResourceManager {
                 getMirrorImage(loadImage
                     ("gallinas/gallina_zombie_attack2_04.png")), 150);
                 
+        //Termina ataque gallina
         
         //ATAQUE DE BORREGOS
         Animation animBorregoAttackLeft = new Animation();
@@ -363,6 +443,7 @@ public class ResourceManager {
         animBorregoAttackRight.addFrame(
                 getMirrorImage(loadImage
                     ("borrego/borrego_attack04.png")), 150);
+        //termina ataque borregos
         
         //MUERTE BORREGO
         Animation animBorregoDieLeft = new Animation();
@@ -409,6 +490,7 @@ public class ResourceManager {
                 getMirrorImage(loadImage
                     ("borrego/borrego_dies08.png")), 150);
        
+        //termina muerte borrego
         
         //MUERTE GALLINA
         Animation animGallinaDieLeft = new Animation();
@@ -455,11 +537,13 @@ public class ResourceManager {
                 getMirrorImage(loadImage
                     ("gallinas/gallina_zombie_dies08.png")), 150);
        
-
+        //termina muerte gallina
+        
         // create creature sprites
-        //en player es 1, 0 para que esten iguales.
+        //en player es 1, 0 para que esten en orden correcto.
         sprPlayer = new Player(animPlayer[1], animPlayer[0],
-            animPlayer[2], animPlayer[3], null, null, animPlayerStand);
+            animPlayer[2], animPlayer[3], animPlayerAttackLeft,
+                animPlayerAttackRight, animPlayerStand);
         sprChicken = new Minion(animChicken[0], animChicken[1],
             animGallinaDieLeft, animGallinaDieRight, animChickenAttackLeft,
                 animChickenAttackRight, null);
@@ -471,7 +555,16 @@ public class ResourceManager {
                             animDuckStand);
     }
 
-
+    /**
+     * Creates the player animations
+     * @param player1
+     * @param player2
+     * @param player3
+     * @param player4
+     * @param player5
+     * @param player6
+     * @return 
+     */
     private Animation createPlayerAnim(Image player1,
         Image player2, Image player3, Image player4,
             Image player5, Image player6)
@@ -519,7 +612,9 @@ public class ResourceManager {
         return anim;
     }
 
-
+    /**
+     * Creates the powerup animations
+     */
     private void loadPowerUpSprites() {//Se cargan las animaciones de los objetos a agarrar
         // create "goal" sprite
         Animation anim = new Animation();
@@ -529,13 +624,31 @@ public class ResourceManager {
         anim.addFrame(loadImage("extras/Chilaquiles_puntos02.png"), 150);
         sprGoal = new PowerUp.Goal(anim);
 
-        // create "star" sprite
+        // create "frijol" sprite
         anim = new Animation();
-        anim.addFrame(loadImage("extras/gota1.png"), 100);
-        anim.addFrame(loadImage("extras/gota2.png"), 100);
-        anim.addFrame(loadImage("extras/gota3.png"), 100);
-        anim.addFrame(loadImage("extras/gota4.png"), 100);
-        sprGota = new PowerUp.Gota(anim);
+        anim.addFrame(loadImage("extras/frijol1.png"), 150);
+        anim.addFrame(loadImage("extras/frijol2.png"), 150);
+        anim.addFrame(loadImage("extras/frijol3.png"), 150);
+        sprFrijol = new PowerUp.Frijol(anim);
+        
+        // create "Tortilla" sprite
+        anim = new Animation();
+        anim.addFrame(loadImage("extras/tortilla1.png"), 150);
+        anim.addFrame(loadImage("extras/tortilla2.png"), 150);
+        sprTortilla = new PowerUp.Tortilla(anim);
 
+        // create "salsa" sprite
+        anim = new Animation();
+        anim.addFrame(loadImage("extras/salsa1.png"), 150);
+        anim.addFrame(loadImage("extras/salsa2.png"), 150);
+        anim.addFrame(loadImage("extras/salsa3.png"), 150);
+        sprSalsa = new PowerUp.Salsa(anim);
+        
+        // create "queso" sprite
+        anim = new Animation();
+        anim.addFrame(loadImage("extras/queso1.png"), 150);
+        anim.addFrame(loadImage("extras/queso2.png"), 150);
+        anim.addFrame(loadImage("extras/queso3.png"), 150);
+        sprQueso = new PowerUp.Queso(anim);
     }
 }

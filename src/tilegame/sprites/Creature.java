@@ -4,10 +4,14 @@ import java.lang.reflect.Constructor;
 import graphics.*;
 
 /**
- *
- * @author Alejandro Valdes
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
  */
 public abstract class Creature extends Sprite {
+    
     
     /**
      * Amount of time to go from STATE_FYING to STATE_DEAD
@@ -73,6 +77,10 @@ public abstract class Creature extends Sprite {
                 
     }
     
+    /**
+     * Creates a clone
+     * @return 
+     */
     public Object clone() {
         // use reflection to create the correct subclass
         Constructor constructor = getClass().getConstructors()[0];
@@ -94,10 +102,16 @@ public abstract class Creature extends Sprite {
         }
     }
 
+    /**
+     * Sets attack to true
+     */
     public void setAttack() {
         bAttack = true;
     }
     
+    /**
+     * Sets attack to false
+     */
     public void stopAttack() {
         bAttack = false;
     }

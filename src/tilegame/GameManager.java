@@ -15,13 +15,19 @@ import test.GameCore;
 import tilegame.sprites.*;
 
 /**
+ * VALKYRIE
+ * ANDREA JAQUELINE BOONE MARTINEZ A01139540
+ * JESUS ALEJANDRO VALDES VALDES A00999044
+ * JORGE ALFONSO GONZALEZ HERRERA A00999088
+ * LUIS ALBERTO LAMADRID TAFICH A01191158
+ */
+
+/**
     GameManager manages all parts of the game.
 */
 public class GameManager extends GameCore {
 
-    public static void main(String[] args) {
-        new GameManager().run();
-    }
+    
 
     // uncompressed, 44100Hz, 16-bit, mono, signed, little-endian
     private static final AudioFormat PLAYBACK_FORMAT =
@@ -32,25 +38,37 @@ public class GameManager extends GameCore {
     public static final float GRAVITY = 0.002f;
 
     private Point pointCache = new Point();
-    private TileMap map;
-    private ResourceManager resourceManager;;
-    private InputManager inputManager;
+    private TileMap map;  //map we'll use
+    private ResourceManager resourceManager;
+    private InputManager inputManager; 
     private TileMapRenderer renderer;
 
-    private GameAction moveLeft;
+    private GameAction moveLeft;  //GmeAct to move
     private GameAction moveRight;
-    private GameAction jump;
-    private GameAction exit;
-    private GameAction pause;
-    private GameAction next;
 
-    private boolean bCanMoveR;
-    private boolean bCanMoveL;
-    private boolean bPause;
-    private boolean bTutLabel;
-    private int iLevel;
-    private int iContTime;
+    private GameAction jump;    //GmeAct to jump
+    private GameAction exit;    //GmeAct to ext
+    private GameAction pause;   //GmeAct to pause
+    private GameAction next;    //GmeAct to begin
+    private GameAction attack;  //GmeAct to attack
+    private GameAction restart; //GameAct to restart
 
+    private boolean bCanMoveR;  //can i move right
+    private boolean bCanMoveL;  //can i move left
+    private boolean bPause;     //am i paused
+    private boolean bTutLabel;  // player requests tutorial
+    private boolean bLost;
+    private int iLevel;     //which level am i in
+    private int iContTime;      //timer for loading
+    private int iLife;      //life percentage
+    private int iContVida;      //timer to know when to substract life
+    private int iContAttack;    //each attack lasts 1 secnod
+    private boolean bAttack;    //is player attacking
+    private int iIngredientes;      //numbre of ingredients needed
+    
+    /**
+     * init initializes all my variables
+     */
     public void init() {
         super.init();
 
@@ -63,25 +81,36 @@ public class GameManager extends GameCore {
 
         // load resources
         renderer = new TileMapRenderer();
+        
+        //Level manegement
+        iIngredientes = 4;
         iLevel = 0;
         iContTime = 0;
         bTutLabel = false;
+        iLife = 10;
+        iContVida = 0;
+        iContAttack = 0;
+        bAttack = false;
+        bLost = false;
         
+        //Adds all my backgrounds
+        renderer.addBackground(
+            resourceManager.loadImage("backgrounds/valkyrie.png")); //0
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/valkyrie.png"));
+            resourceManager.loadImage("backgrounds/Menu.png")); //1
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/Menu.png"));
+            resourceManager.loadImage("backgrounds/tutorial.png"));  //2
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/tutorial.png"));
+            resourceManager.loadImage("backgrounds/level1.png")); //3
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/level1.png"));
+            resourceManager.loadImage("backgrounds/level2.png")); //4
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/level2.png"));
+            resourceManager.loadImage("backgrounds/YOULOSE.jpg")); //5
         
         renderer.setBackground(iLevel);
 
@@ -98,84 +127,159 @@ public class GameManager extends GameCore {
     }
 
 
+    /**
+     * initializes the input that'll be used
+     */
     private void initInput() {
+        //i can move
         bCanMoveR = true;
         bCanMoveL = true;
+        //not pause
         bPause = false;
+        //Creation of all the game actions
         moveLeft = new GameAction("moveLeft");
         moveRight = new GameAction("moveRight");
         jump = new GameAction("jump",
-            GameAction.I_DETECT_INITIAL_PRESS_ONLY);
+                GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         exit = new GameAction("exit",
-            GameAction.I_DETECT_INITIAL_PRESS_ONLY);
+                GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         pause = new GameAction("pause", 
-            GameAction.I_DETECT_INITIAL_PRESS_ONLY);
+                GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         next = new GameAction("next");
+        attack = new GameAction("attack",
+                GameAction.I_DETECT_INITIAL_PRESS_ONLY);
+        restart = new GameAction("restart", 
+                GameAction.I_DETECT_INITIAL_PRESS_ONLY);
+        
         
         inputManager = new InputManager(
             screen.getFullScreenWindow());
         inputManager.setCursor(InputManager.INVISIBLE_CURSOR);
 
+        //Mapping of gameActions to keys
         inputManager.mapToKey(moveLeft, KeyEvent.VK_LEFT);
         inputManager.mapToKey(moveRight, KeyEvent.VK_RIGHT);
         inputManager.mapToKey(jump, KeyEvent.VK_SPACE);
         inputManager.mapToKey(exit, KeyEvent.VK_ESCAPE);
         inputManager.mapToKey(pause, KeyEvent.VK_P);
         inputManager.mapToKey(next, KeyEvent.VK_S);
+        inputManager.mapToKey(attack, KeyEvent.VK_Z);
+        inputManager.mapToKey(restart, KeyEvent.VK_R);
         
     }
 
+    /**
+     * Checks for pause and exit
+     * can  be used even out of pause
+     * @param elapsedTime 
+     */
     private void checkSystemInput(long elapsedTime) {
         
         if(pause.isPressed()){
             bPause = false; 
             pause.reset();
         }
+        
+        if (exit.isPressed()) {
+                stop();
+        }
     }
 
+    /**
+     * Checks all the input of the keyboard
+     * @param elapsedTime 
+     */
     private void checkInput(long elapsedTime) {
             
-            if (exit.isPressed()) {
-                stop();
+        if (exit.isPressed()) {
+            stop();
+        }
+        
+        if(restart.isPressed() && bLost) {
+            //UN TIPO DE INIT()
+            //Level manegement
+            iIngredientes = 4;
+            iLevel = 3;
+            iContTime = 0;
+            iLife = 10;
+            iContVida = 0;
+            iContAttack = 0;
+            bAttack = false;
+            bLost = false;
+            //i can move
+            bCanMoveR = true;
+            bCanMoveL = true;
+            //not pause
+            bPause = false;
+            renderer.setBackground(iLevel);
+            resourceManager.setiCurrentMap(1);
+            map = resourceManager.loadNextMap();
+
+            restart.reset();            
+        }
+
+        if(next.isPressed() && iLevel == 1) {
+            iLevel++;
+            renderer.setBackground(iLevel);     //chance background   
+        }
+
+        //Moves the player around
+        Player player = (Player)map.getPlayer();
+        if (player.isAlive()) {
+            float velocityX = 0;
+            
+            if(bCanMoveL){
+                if (moveLeft.isPressed()) {
+                    velocityX-=player.getMaxSpeed();
+                }
             }
 
-            if(next.isPressed() && iLevel == 1) {
-                iLevel++;
-                renderer.setBackground(iLevel);        
+            if(bCanMoveR){
+                if (moveRight.isPressed()) {
+                    velocityX+=player.getMaxSpeed();
+                }
             }
 
-            Player player = (Player)map.getPlayer();
-            if (player.isAlive()) {
-                float velocityX = 0;
+            if (pause.isPressed()) {
+                bPause = true;
+                pause.reset();
+            }
 
-                if(bCanMoveL){
-                    if (moveLeft.isPressed()) {
-                        velocityX-=player.getMaxSpeed();
-                    }
-                }
+            if (jump.isPressed()) {
+                player.jump(false);
+                bCanMoveR = true;
+                bCanMoveL = true;
+            }
 
-                if(bCanMoveR){
-                    if (moveRight.isPressed()) {
-                        velocityX+=player.getMaxSpeed();
-                    }
+            if(attack.isPressed()) {
+                player.setAttack();
+                bAttack = true;
+                iContAttack++;
+               
+            }
+            else {
+                if(iContAttack > 40) {
+                    player.stopAttack();
+                    iContAttack = 0;
+                    attack.reset();
+                    bAttack = false;
+                    
                 }
-                
-                if (pause.isPressed()) {
-                    bPause = true;
-                    pause.reset();
+                else if (iContAttack > 0) {
+                    iContAttack++;
                 }
+            }
 
-                if (jump.isPressed()) {
-                    player.jump(false);
-                    bCanMoveR = true;
-                    bCanMoveL = true;
-                }
-
-                player.setVelocityX(velocityX);
+            player.setVelocityX(velocityX);
             }
     }
 
+    
 
+    /**
+     * draws basic info on the screen
+     * @param g 
+     */
     public void draw(Graphics2D g) {
         renderer.draw(g, map,
             screen.getWidth(), screen.getHeight());
@@ -193,6 +297,12 @@ public class GameManager extends GameCore {
             g.drawString("PRESS ESC TO EXIT" , screen.getWidth() / 2 - 110,
                      270);
             
+        }
+        else if(iLevel > 1 && !bLost) {
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Verdana", Font.BOLD, 40));
+            g.drawString("LIFE: " + iLife +"%", screen.getWidth() - 240,
+                     50);         
         }
         
         // si el jugador esta pidiendo tutorial
@@ -218,13 +328,20 @@ public class GameManager extends GameCore {
             // pinta la imagen en un rectangulo de su tamaño
             g.fillRect(0, 0, 800, 180);
             g.drawImage(image, 0, 0, null);
-        }
+        }   
         
         if(bPause) {
             g.setColor(Color.black);
             g.setFont(new Font("TimesRoman", Font.BOLD, 60));
             g.drawString("PAUSE" , screen.getWidth() / 2 - 200,
                      200);
+        }
+        
+        if(bLost) {
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Verdana", Font.BOLD, 40));
+            g.drawString("R to RESTART", screen.getWidth()/ 2 - 150,
+                     250);      
         }
     }
 
@@ -337,7 +454,8 @@ public class GameManager extends GameCore {
     public void update(long elapsedTime) {
         Creature player = (Creature)map.getPlayer();
         
-        if(iLevel == 0 && iContTime < 120) {
+        //for our loading screen
+        if(iLevel == 0 && iContTime < 50) {
             iContTime++;
         }
         else if(iLevel == 0){
@@ -348,8 +466,13 @@ public class GameManager extends GameCore {
 
         // player is dead! start map over
         if (player.getState() == Creature.I_STATE_DEAD) {
-            map = resourceManager.reloadMap();
-            return;
+            //map = resourceManager.reloadMap();
+            iLevel = 5;  //El You lose
+            renderer.setBackground(iLevel);
+            bLost = true;
+            // get keyboard/mouse input
+            checkInput(elapsedTime);
+            //return;
         }
         
         if(bPause) {
@@ -481,10 +604,26 @@ public class GameManager extends GameCore {
                 bCanMoveR = true;
                 bCanMoveL = true;
                 player.jump(true);
-                
             }
-            else if (player.bOnGround){
-                // player dies!
+                        
+            //if a second has gone by decrease life
+            if(iContVida<30){
+                iContVida++;
+            }
+            else{
+                iContVida = 0;
+                iLife -= 5;
+            }
+            //im dead
+            if(iLife <= 0) {
+                player.setState(Minion.I_STATE_DEAD);
+            }
+
+            /*if the player is on the ground he can only move the oposite 
+            direction*/
+            
+            if (player.bOnGround){
+                
                 player.setVelocityX(0);
                 if(badguy.getX() > player.getX()) {
                     badguy.setX(player.getX() + player.getWidth());
@@ -496,13 +635,28 @@ public class GameManager extends GameCore {
                     bCanMoveL = false;
 
                 }
-                
-                
+               
                 badguy.setAttack();
             }
             
             else {
                 badguy.stopAttack();
+            }
+            
+            if (canKill || bAttack) {
+                
+                if(canKill) {
+                    // kill the badguy and make player bounce
+                    player.setY(badguy.getY() - player.getHeight());
+                    player.jump(true);
+                }
+                
+                badguy.setState(Minion.I_STATE_DYING);
+                //I can move again
+                bCanMoveR = true;
+                bCanMoveL = true;
+                iContVida = 0;    
+                
             }
             
         }
@@ -522,21 +676,29 @@ public class GameManager extends GameCore {
     */
     public void acquirePowerUp(PowerUp powerUp) {
         // remove it from the map
-        map.removeSprite(powerUp);
 
         if (powerUp instanceof PowerUp.Goal) {
             // advance to next map
-            if(iLevel < 4){
-                iLevel++;
+            if(iIngredientes ==0) {
+                if(iLevel < 4){
+                    iLevel++;
+                    iIngredientes = 4;  //necesito otros 4 ingredientes otra vez
+                }
+                else {
+                    map.removeSprite(powerUp);
+                    iLevel = 1;
+                    resourceManager.setiCurrentMap(2);
+                    iIngredientes = 4;
+                }
+                map = resourceManager.loadNextMap();
+                renderer.setBackground(iLevel);
             }
-            else {
-                iLevel = 1;
-                resourceManager.setiCurrentMap(2);
-            }
-            map = resourceManager.loadNextMap();
-            renderer.setBackground(iLevel);
         }
+        else {
+            iIngredientes--;
+            map.removeSprite(powerUp);
+        }
+            
     }
-
 }
 
