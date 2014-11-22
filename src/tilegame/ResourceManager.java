@@ -1,12 +1,12 @@
 package tilegame;
 
+import graphics.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
-
-import graphics.*;
 import tilegame.sprites.*;
 
 /**
@@ -53,8 +53,9 @@ public class ResourceManager {
             Gets an image from the images/ directory.
      */
     public Image loadImage(String name) {
-        String filename = "images/" + name;
-        return new ImageIcon(filename).getImage();
+        String filename = "/images/" + name;
+        URL imageURL = ResourceManager.class.getResource(filename);
+        return new ImageIcon(imageURL).getImage();
     }
     
     /**
@@ -117,7 +118,7 @@ public class ResourceManager {
             iCurrentMap ++ ;
             try {
                 map = loadMap(
-                    "maps/map" + iCurrentMap + ".txt");
+                    "/maps/map" + iCurrentMap + ".txt");
             }
             catch (IOException ex) {
                 if (iCurrentMap == 1) {
@@ -135,7 +136,7 @@ public class ResourceManager {
     public TileMap reloadMap() {
         try {
             return loadMap(
-                "maps/map" + iCurrentMap + ".txt");
+                "/maps/map" + iCurrentMap + ".txt");
         }
         catch (IOException ex) {
             ex.printStackTrace();
@@ -158,8 +159,10 @@ public class ResourceManager {
         int height = 0;
 
         // read every line in the text file into the list
-        BufferedReader reader = new BufferedReader(
-            new FileReader(filename));
+        URL mapURL = ResourceManager.class.getResource(filename);
+        InputStreamReader isr = new InputStreamReader(mapURL.openStream());
+        BufferedReader reader = new BufferedReader(isr);
+        
         while (true) {
             String line = reader.readLine();
             // no more lines to read
@@ -277,8 +280,11 @@ public class ResourceManager {
         char ch = 'A';
         while (true) {
             String name = "tiles/tile_" + ch + ".png";
-            File file = new File("images/" + name);
+            /*File file = new File("images/" + name);
             if (!file.exists()) {
+                break;
+            }*/
+            if(ch > 'O') {
                 break;
             }
             arrLTiles.add(loadImage(name));
