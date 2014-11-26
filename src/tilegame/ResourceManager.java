@@ -30,6 +30,7 @@ public class ResourceManager {
     //Sprites used for cloning
     private Sprite sprPlayer;
     private Sprite sprGoal;
+    private Sprite sprCoin;
     private Sprite sprChicken;
     private Sprite sprDuck1;
     private Sprite sprBorrego;
@@ -226,6 +227,9 @@ public class ResourceManager {
 
                 else if (ch == '*') {
                     addSprite(newMap, sprGoal, x, y);
+                }
+                else if (ch == '+') {
+                    addSprite(newMap, sprCoin, x,y);
                 }
                 else if (ch == '1') {
                     addSprite(newMap, sprChicken, x, y);
@@ -676,9 +680,17 @@ public class ResourceManager {
         anim.addFrame(loadImage("extras/Chilaquiles_puntos01.png"), 150);
         anim.addFrame(loadImage("extras/Chilaquiles_puntos02.png"), 150);
         anim.addFrame(loadImage("extras/Chilaquiles_puntos03.png"), 150);
-        anim.addFrame(loadImage("extras/Chilaquiles_puntos02.png"), 150);
+        anim.addFrame(loadImage("extras/Chilaquiles_puntos04.png"), 150);
         sprGoal = new PowerUp.Goal(anim);
-
+        
+        //Create "coin" sprite
+        anim = new Animation();
+        anim.addFrame(loadImage("extras/coin_01.png"), 150);
+        anim.addFrame(loadImage("extras/coin_02.png"), 150);
+        anim.addFrame(loadImage("extras/coin_03.png"), 150);
+        anim.addFrame(loadImage("extras/coin_02.png"), 150);
+        sprCoin = new PowerUp.Coin(anim);
+        
         // create "frijol" sprite
         anim = new Animation();
         anim.addFrame(loadImage("extras/frijol1.png"), 150);
