@@ -1,0 +1,23 @@
+# Map file for tile-based game
+# (Lines that start with '#' are comments)
+# The tiles are:
+#   (Space) Empty tile
+#   A..Z    Tiles A through Z
+#   o       Frijol
+#   !       Salsa
+#   ,	    Tortilla
+#   .       Queso
+#   *       Goal
+#   1       Gallinas
+#   2       Borregos
+                                                                 
+II                                                                                   IIIIIII
+II                                                                                   IIIIIII
+II                                            .                       o1             IIIIIII
+II                                            O                    O  KLLM           IIIIIII
+II                    KLLLLLLLLLLLLLLLM       N               1 ,  N                 IIIIIII
+II                        1   !      1     KLLLLLLLLL     KLLLLLLLLM                 IIIIIII          
+II                    KLLLLLLLLLLLLLLLM                                              IIIIIII       
+II                           1  2                   OOO                              IIIIIII
+II             2      KLLLLLLLLLLLLLLLM             NNN 2              *         2   IIIIIII        
+IIBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBIIIIIII
