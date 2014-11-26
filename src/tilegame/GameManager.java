@@ -1,5 +1,4 @@
 package tilegame;
-
 import graphics.*;
 import input.*;
 import java.awt.*;
@@ -13,6 +12,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.swing.ImageIcon;
 import test.GameCore;
 import tilegame.sprites.*;
+import sound.*;
 
 /**
  * VALKYRIE
@@ -43,6 +43,8 @@ public class GameManager extends GameCore {
     private InputManager inputManager; 
     private TileMapRenderer renderer;
 
+    private static SoundClip scMusic;
+    
     private GameAction moveLeft;  //GmeAct to move
     private GameAction moveRight;
 
@@ -74,7 +76,11 @@ public class GameManager extends GameCore {
 
         // set up input manager
         initInput();
-
+        
+        scMusic = new SoundClip("/sounds/music.mp3");
+        scMusic.setLooping(true);
+        scMusic.play();
+        
         // start resource manager
         resourceManager = new ResourceManager(
         screen.getFullScreenWindow().getGraphicsConfiguration());
@@ -258,10 +264,10 @@ public class GameManager extends GameCore {
                
             }
             else {
-                if(iContAttack > 40) {
+                if(iContAttack > 15) {
                     player.stopAttack();
                     iContAttack = 0;
-                    attack.reset();
+                    attack.release();
                     bAttack = false;
                     
                 }
@@ -633,22 +639,10 @@ public class GameManager extends GameCore {
             }
             //im dead
             if(iLife <= 0) {
-                player.setState(Minion.I_STATE_DEAD);
+                player.setState(Minion.I_STATE_DYING);
             }
             
-            //if a second has gone by decrease life
-            if(iContVida<30){
-                iContVida++;
-            }
-            else{
-                iContVida = 0;
-                iLife -= 5;
-            }
-            //im dead
-            if(iLife <= 0) {
-                player.setState(Minion.I_STATE_DEAD);
-            }
-
+           
             /*if the player is on the ground he can only move the oposite 
             direction*/
             

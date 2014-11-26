@@ -403,6 +403,27 @@ public class ResourceManager {
                     ("player/Hero_Sprite_Attacking_03.png")), 150);
         //Termina ataque Heroe
         
+        //MUERTE HEROE
+        Animation animPlayerDieLeft = new Animation();
+        animPlayerDieLeft.addFrame(
+                loadImage("player/Hero_Dead01.png"), 300);
+        animPlayerDieLeft.addFrame(
+                loadImage("player/Hero_Dead02.png"), 300);
+        animPlayerDieLeft.addFrame(
+                loadImage("player/Hero_Dead03.png"), 300);
+        
+        Animation animPlayerDieRight = new Animation();
+        animPlayerDieRight.addFrame(
+                getMirrorImage(loadImage
+                    ("player/Hero_Dead01.png")), 300);
+        animPlayerDieRight.addFrame(
+                getMirrorImage(loadImage
+                    ("player/Hero_Dead02.png")), 300);
+        animPlayerDieRight.addFrame(
+                getMirrorImage(loadImage
+                    ("player/Hero_Dead03.png")), 320);
+        //Termina muerte heroe
+        
         //Ataque gallina
         Animation animChickenAttackLeft = new Animation();
         animChickenAttackLeft.addFrame(
@@ -553,7 +574,7 @@ public class ResourceManager {
         // create creature sprites
         //en player es 1, 0 para que esten en orden correcto.
         sprPlayer = new Player(animPlayer[1], animPlayer[0],
-            animPlayer[2], animPlayer[3], animPlayerAttackLeft,
+            animPlayerDieLeft, animPlayerDieRight, animPlayerAttackLeft,
                 animPlayerAttackRight, animPlayerStand);
         sprChicken = new Minion(animChicken[0], animChicken[1],
             animGallinaDieLeft, animGallinaDieRight, animChickenAttackLeft,

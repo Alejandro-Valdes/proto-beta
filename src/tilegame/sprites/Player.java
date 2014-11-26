@@ -123,7 +123,7 @@ public class Player extends Creature {
             newAnim = animAttackRight;
         } 
         
-        if (iState == I_STATE_DYING && newAnim == animLeft) {
+        if (iState == I_STATE_DYING) {
             newAnim = animDeadLeft;
         }
         else if (iState == I_STATE_DYING && newAnim == animRight) {
