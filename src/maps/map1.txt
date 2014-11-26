@@ -5,14 +5,17 @@
 #   A..Z    Tiles A through Z
 #   o       Frijol
 #   !       Salsa
-#   ,	    Tortilla
+#   ,	      Tortilla
 #   .       Queso
 #   *       Goal
 #   1       Gallinas
 #   2       Borregos
-#   3       Tutorial Duck                                                              
-                                            3
-B                                  2F      EF         
-AB                                 EA     EAF          3
-AAB 3  3  3  3EF 1  3     3  1    EAAxzxzEAAF o  ! , .EBF     * 2
+#   3       Tutorial Duck 
+#   x       Lava
+#   z       Lava2 siempre poner juntas en numero par
+#   +       Coin                                                                 
+                                          + 3
+B                                  2F      EF      +  
+AB             +                   EA     EAF          3
+AAB 3  3  3  3EF 1  3   + 3  1    EAAxzxzEAAF o  ! , .EBF     * 2
 BBBBBBBBGHBBBBBBBGHBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBGAAHBBBBBBBBBBB

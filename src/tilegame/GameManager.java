@@ -54,10 +54,12 @@ public class GameManager extends GameCore {
     private GameAction next;    //GmeAct to begin
     private GameAction attack;  //GmeAct to attack
     private GameAction restart; //GameAct to restart
+    private Image imaPausa; //imagen para pausar
 
     private boolean bCanMoveR;  //can i move right
     private boolean bCanMoveL;  //can i move left
     private boolean bPause;     //am i paused
+    private boolean bMusicStart;
     private boolean bTutLabel;  // player requests tutorial
     private boolean bLost;
     private int iLevel;     //which level am i in
@@ -67,6 +69,7 @@ public class GameManager extends GameCore {
     private int iContAttack;    //each attack lasts 1 secnod
     private boolean bAttack;    //is player attacking
     private int iIngredientes;      //numbre of ingredients needed
+    private int iScore;     //score of the game incrmeneted by coins
     
     /**
      * init initializes all my variables
@@ -77,9 +80,8 @@ public class GameManager extends GameCore {
         // set up input manager
         initInput();
         
-        scMusic = new SoundClip("/sounds/music.mp3");
+        scMusic = new SoundClip("/sounds/music.wav");
         scMusic.setLooping(true);
-        scMusic.play();
         
         // start resource manager
         resourceManager = new ResourceManager(
@@ -87,7 +89,8 @@ public class GameManager extends GameCore {
 
         // load resources
         renderer = new TileMapRenderer();
-        
+        //load pause image
+        imaPausa = resourceManager.loadImage("extras/PAUSA_white.png");
         //Level manegement
         iIngredientes = 4;
         iLevel = 0;
@@ -98,13 +101,15 @@ public class GameManager extends GameCore {
         iContAttack = 0;
         bAttack = false;
         bLost = false;
+        iScore = 0;
+        bMusicStart = false;
         
         //Adds all my backgrounds
         renderer.addBackground(
             resourceManager.loadImage("backgrounds/valkyrie.png")); //0
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/Menu.png")); //1
+            resourceManager.loadImage("backgrounds/PROJECTA00.jpg")); //1
         
         renderer.addBackground(
             resourceManager.loadImage("backgrounds/tutorial.png"));  //2
@@ -138,8 +143,8 @@ public class GameManager extends GameCore {
      */
     private void initInput() {
         //i can move
-        bCanMoveR = true;
-        bCanMoveL = true;
+        bCanMoveR = false;
+        bCanMoveL = false;
         //not pause
         bPause = false;
         //Creation of all the game actions
@@ -210,6 +215,7 @@ public class GameManager extends GameCore {
             iLife = 100;
             iContVida = 0;
             iContAttack = 0;
+            iScore = 0;
             bAttack = false;
             bLost = false;
             //i can move
@@ -225,7 +231,10 @@ public class GameManager extends GameCore {
         }
 
         if(next.isPressed() && iLevel == 1) {
+            bCanMoveL =true;
+            bCanMoveR = true;
             iLevel++;
+            scMusic.play();
             renderer.setBackground(iLevel);     //chance background   
         }
 
@@ -290,25 +299,13 @@ public class GameManager extends GameCore {
         renderer.draw(g, map,
             screen.getWidth(), screen.getHeight());
         
-        if(iLevel == 1) {
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("TimesRoman", Font.BOLD, 60));
-            g.drawString("PROYECT A00" , screen.getWidth() / 2 - 200,
-                     200);
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-            g.drawString("PRESS S TO START" , screen.getWidth() / 2 - 110,
-                     230);
-            g.drawString("PRESS P TO PAUSE" , screen.getWidth() / 2 - 110,
-                     250);
-            g.drawString("PRESS ESC TO EXIT" , screen.getWidth() / 2 - 110,
-                     270);
-            
-        }
-        else if(iLevel > 1 && !bLost) {
+        if(iLevel > 1 && !bLost) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Verdana", Font.BOLD, 40));
-            g.drawString("LIFE: " + iLife +"%", screen.getWidth() - 240,
+            g.drawString("LIFE: " + iLife +"%", screen.getWidth() - 250,
                      50);
+            g.drawString("SCORE: " + iScore, 50 , 50);
+            
             if(iIngredientes > 0){
                 g.setFont(new Font("Verdana",Font.PLAIN, 20));
                 g.drawString("INGREDIENTS 2 GO: " + iIngredientes, 
@@ -319,6 +316,7 @@ public class GameManager extends GameCore {
                 g.drawString("GET TO THE CHILAQUILES", 
                         screen.getWidth() - 265, 100);
             }
+            
         }
         
         // si el jugador esta pidiendo tutorial
@@ -354,18 +352,12 @@ public class GameManager extends GameCore {
             g.drawImage(image, 0, 0, null);
         }   
         
-        else if(iLevel > 1 && !bLost) {
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("Verdana", Font.BOLD, 40));
-            g.drawString("LIFE: " + iLife +"%", screen.getWidth() - 240,
-                     50);          
-        }
         
         if(bPause) {
             g.setColor(Color.black);
             g.setFont(new Font("TimesRoman", Font.BOLD, 60));
-            g.drawString("PAUSE" , screen.getWidth() / 2 - 200,
-                     200);
+            g.drawImage(imaPausa , screen.getWidth() / 2 - 
+                    imaPausa.getWidth(null)/2,200, null);
         }
         
         if(bLost) {
@@ -628,13 +620,18 @@ public class GameManager extends GameCore {
         }
         else if (collisionSprite instanceof Minion) {
             Minion badguy = (Minion)collisionSprite;
-            if (canKill) {
+            if (canKill || bAttack) {
                 // kill the badguy and make player bounce
+                if(canKill) {
+                    player.setY(badguy.getY() - player.getHeight());
+                    player.jump(true);
+
+                }
                 badguy.setState(Minion.I_STATE_DYING);
-                player.setY(badguy.getY() - player.getHeight());
                 bCanMoveR = true;
                 bCanMoveL = true;
-                player.jump(true);
+                iScore+=5;
+                
             }
                         
             //if a second has gone by decrease life
@@ -650,11 +647,21 @@ public class GameManager extends GameCore {
                 player.setState(Minion.I_STATE_DYING);
             }
             
+            //if player can attack;
+            /*if (bAttack) {
+                badguy.setState(Minion.I_STATE_DYING);
+
+                //I can move again
+                bCanMoveR = true;
+                bCanMoveL = true;
+                iContVida = 0;    
+                
+            }*/
            
             /*if the player is on the ground he can only move the oposite 
             direction*/
             
-            if (player.bOnGround){
+            if (player.bOnGround && !bAttack){
                 
                 player.setVelocityX(0);
                 if(badguy.getX() > player.getX()) {
@@ -669,28 +676,15 @@ public class GameManager extends GameCore {
                 }
                
                 badguy.setAttack();
+                
+               
             }
             
             else {
                 badguy.stopAttack();
             }
             
-            if (canKill || bAttack) {
-                
-                if(canKill) {
-                    // kill the badguy and make player bounce
-                    player.setY(badguy.getY() - player.getHeight());
-                    player.jump(true);
-                }
-                
-                badguy.setState(Minion.I_STATE_DYING);
 
-                //I can move again
-                bCanMoveR = true;
-                bCanMoveL = true;
-                iContVida = 0;    
-                
-            }
             
         }
         // checa si el jugador pide el tutorial al colisionar con un pato
@@ -703,6 +697,7 @@ public class GameManager extends GameCore {
         //si choco con la lava me muero obviamente
         if(collisionSprite instanceof Lava){
             iLife = 0;
+            player.setState(Minion.I_STATE_DYING);
         }
 
     }
@@ -731,7 +726,11 @@ public class GameManager extends GameCore {
                 renderer.setBackground(iLevel);
             }
         }
-        else {
+        else if (powerUp instanceof PowerUp.Coin) {
+            iScore+=10;
+            map.removeSprite(powerUp);
+        }
+        else { 
             iIngredientes--;
             map.removeSprite(powerUp);
         }

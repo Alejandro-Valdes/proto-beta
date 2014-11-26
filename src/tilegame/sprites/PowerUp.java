@@ -74,7 +74,14 @@ public abstract class PowerUp extends Sprite {
     }
 
 
-    
+    /**
+     *  A Coing powerUp. Increases score
+     */ 
+    public static class Coin extends PowerUp {
+        public Coin(Animation anim) {
+            super(anim);
+        }
+    }
 
 
     /**
