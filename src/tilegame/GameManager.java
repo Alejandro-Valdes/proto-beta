@@ -50,6 +50,8 @@ public class GameManager extends GameCore {
     private SoundClip scNotYet;
     private SoundClip scCoin;
     private SoundClip scGoal;
+    private SoundClip scAttack;
+    private SoundClip scPato;
     
     private GameAction moveLeft;  //GmeAct to move
     private GameAction moveRight;
@@ -74,6 +76,7 @@ public class GameManager extends GameCore {
     private int iLife;      //life percentage
     private int iContVida;      //timer to know when to substract life
     private int iContAttack;    //each attack lasts 1 secnod
+    private int iAttackLock;  //lock so that player cant attack in a loop
     private boolean bAttack;    //is player attacking
     private int iIngredientes;      //numbre of ingredients needed
     private int iScore;     //score of the game incrmeneted by coins
@@ -96,6 +99,8 @@ public class GameManager extends GameCore {
         scNotYet = new SoundClip("/sounds/notYet.wav");
         scZombie = new SoundClip("/sounds/zombie.wav");
         scGoal = new SoundClip("/sounds/goal.wav");
+        scAttack = new SoundClip("/sounds/Attack.wav");
+        scPato = new SoundClip("/sounds/pato.wav");
                   
         
         // start resource manager
@@ -118,6 +123,7 @@ public class GameManager extends GameCore {
         bAttack = false;
         bLost = false;
         iScore = 0;
+        iAttackLock = 0;
         
         //Adds all my backgrounds
         renderer.addBackground(
@@ -294,10 +300,12 @@ public class GameManager extends GameCore {
                 bCanMoveL = true;
             }
 
-            if(attack.isPressed()) {
+            if(attack.isPressed() && iAttackLock > 15) {
                 player.setAttack();
                 bAttack = true;
                 iContAttack++;
+                iAttackLock = 0;
+                scAttack.play();
                
             }
             else {
@@ -504,6 +512,8 @@ public class GameManager extends GameCore {
     */
     public void update(long elapsedTime) {
         Creature player = (Creature)map.getPlayer();
+        
+        iAttackLock++;
         
         //for our loading screen
         if(iLevel == 0 && iContTime < 50) {
@@ -724,8 +734,10 @@ public class GameManager extends GameCore {
         // checa si el jugador pide el tutorial al colisionar con un pato
         else if (collisionSprite instanceof Duck) {
             bTutLabel = true;  // prende la boleana
+            
         } else {
             bTutLabel = false; // apaga la boleana
+            scPato.play();
         }
         
         //si choco con la lava me muero obviamente

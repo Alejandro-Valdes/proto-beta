@@ -13,9 +13,9 @@
 #   3       Tutorial Duck 
                                               +
                        o     +    !           O                    III
-                       I        KLLM          N          .+        III
-              +     +                   I   KLM       + KLM        III
-          +   IXZI   KLLM       +     O          I ,  I            III              
-       O II                 DI*      2N            I               III
+                       I O      KLLM          N          .+        III
+              IxzI   +   N               I   KLM       + KLM       III
+          +   IIII  I  KLLM       +   O            I ,  I          III              
+       O II                 DI*      2N            I I             III
     111NEFIxzxzxzxzxzxzxzxzxDIIID 21IKLxzxzxzxzxzxzxzxzxzxzxzxzxzxzIII
 BBBBBBBBGHHBBBBBBBBBBBBBBBBBBBBBGIIIBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBIII
