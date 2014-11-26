@@ -56,30 +56,31 @@ public class GameManager extends GameCore {
     private GameAction moveLeft;  //GmeAct to move
     private GameAction moveRight;
 
-    private GameAction jump;    //GmeAct to jump
-    private GameAction exit;    //GmeAct to ext
-    private GameAction pause;   //GmeAct to pause
-    private GameAction next;    //GmeAct to begin
-    private GameAction attack;  //GmeAct to attack
-    private GameAction restart; //GameAct to restart
-    private Image imaPausa; //imagen para pausar
+    private GameAction jump;    // GmeAct to jump
+    private GameAction exit;    // GmeAct to ext
+    private GameAction pause;   // GmeAct to pause
+    private GameAction next;    // GmeAct to begin
+    private GameAction attack;  // GmeAct to attack
+    private GameAction restart; // GameAct to restart
+    private Image imaPausa;     // imagen para pausar
 
-    private boolean bCanMoveR;  //can i move right
-    private boolean bCanMoveL;  //can i move left
-    private boolean bPause;     //am i paused
-    private boolean bImPlaying; //am i playing
+    private boolean bCanMoveR;  // can i move right
+    private boolean bCanMoveL;  // can i move left
+    private boolean bPause;     // am i paused
+    private boolean bImPlaying; // am i playing
     private boolean bTutLabel;  // player requests tutorial
     private boolean bLost;
-    private int iLevel;     //which level am i in
-    private int iNumLevels;  //how many levels do we have
-    private int iContTime;      //timer for loading
-    private int iLife;      //life percentage
-    private int iContVida;      //timer to know when to substract life
-    private int iContAttack;    //each attack lasts 1 secnod
-    private int iAttackLock;  //lock so that player cant attack in a loop
-    private boolean bAttack;    //is player attacking
-    private int iIngredientes;      //numbre of ingredients needed
-    private int iScore;     //score of the game incrmeneted by coins
+
+    private int iLevel;         // which level am i in
+    private int iNumLevels;     // how many levels do we have
+    private int iContTime;      // timer for loading
+    private int iLife;          // life percentage
+    private int iContVida;      // timer to know when to substract life
+    private int iContAttack;    // each attack lasts 1 secnod
+    private int iAttackLock;    //to delay attack of player
+    private boolean bAttack;    // is player attacking
+    private int iIngredientes;  // numbre of ingredients needed
+    private int iScore;         // score of the game incrmeneted by coins
     
     /**
      * init initializes all my variables
@@ -172,13 +173,15 @@ public class GameManager extends GameCore {
      * initializes the input that'll be used
      */
     private void initInput() {
-        //i can move
+        // Initializing movement booleans
         bCanMoveR = false;
         bCanMoveL = false;
-        //not pause
+        
+        // Initializing pause and play booleans
         bPause = false;
         bImPlaying = false;
-        //Creation of all the game actions
+        
+        // Creation of all the game actions
         moveLeft = new GameAction("moveLeft");
         moveRight = new GameAction("moveRight");
         jump = new GameAction("jump",
@@ -193,7 +196,7 @@ public class GameManager extends GameCore {
         restart = new GameAction("restart", 
                 GameAction.I_DETECT_INITIAL_PRESS_ONLY);
         
-        
+        // Creation of Input Manager
         inputManager = new InputManager(
             screen.getFullScreenWindow());
         inputManager.setCursor(InputManager.INVISIBLE_CURSOR);
@@ -216,12 +219,12 @@ public class GameManager extends GameCore {
      * @param elapsedTime 
      */
     private void checkSystemInput(long elapsedTime) {
-        
+        // When the player pauses with "P"
         if(pause.isPressed()){
             bPause = false; 
             pause.reset();
         }
-        
+        // If the player presses ESC
         if (exit.isPressed()) {
                 stop();
         }
@@ -232,11 +235,11 @@ public class GameManager extends GameCore {
      * @param elapsedTime 
      */
     private void checkInput(long elapsedTime) {
-            
+        // If the player presses ESC
         if (exit.isPressed()) {
             stop();
         }
-        
+        // If restart is pressend and the player hasnt lost
         if(restart.isPressed() && bLost) {
             //UN TIPO DE INIT()
             //Level manegement
@@ -250,10 +253,12 @@ public class GameManager extends GameCore {
             iScore = 0;
             bAttack = false;
             bLost = false;
-            //i can move
+            
+            //Movement booleans
             bCanMoveR = true;
             bCanMoveL = true;
-            //not pause
+            
+            //Pause boolean
             bPause = false;
             renderer.setBackground(iLevel);
             resourceManager.setiCurrentMap(1); 
@@ -264,15 +269,21 @@ public class GameManager extends GameCore {
         }
 
         if(next.isPressed() && iLevel == 1) {
+            //Movement booleans
             bCanMoveL =true;
             bCanMoveR = true;
+            
+            // Increaing level
             iLevel++;
+            
+            // Playing music
             bImPlaying = true;
             scMusic.play();
             renderer.setBackground(iLevel);     //tutorial background   
         }
 
-        //Moves the player around
+        // Moves the player around by mapping the pressed keys to
+        // an action
         Player player = (Player)map.getPlayer();
         if (player.isAlive()) {
             float velocityX = 0;
@@ -328,7 +339,7 @@ public class GameManager extends GameCore {
     
 
     /**
-     * draws basic info on the screen
+     * draws important info on the screen
      * @param g 
      */
     public void draw(Graphics2D g) {        
@@ -355,14 +366,14 @@ public class GameManager extends GameCore {
             
         }
         
-        // si el jugador esta pidiendo tutorial
+        // If the tutorial is displayed
         if (bTutLabel) {
-            // Obteniendo el jugador
+            // Getting the player
             Player player = (Player)map.getPlayer();
             
-            // declarando imagen inicial
+            // Declaring initial resource manager
             Image image = resourceManager.loadImage("extras/pato_agarrachilaquiles.png");
-            //g.drawString("X: " + player.getX(), 300, 400);
+            // g.drawString("X: " + player.getX(), 300, 400);
             // checando en que posicion del mapa tutorial esta el personaje para saber
             // que consejo del pato desplegar
             if (player.getX() > 3400) {
@@ -383,12 +394,12 @@ public class GameManager extends GameCore {
                 image = resourceManager.loadImage("Props/pato_historia01.png");
             }
             
-            // pinta la imagen en un rectangulo de su tamaño
+            // paints the selected previous image
             g.fillRect(0, 0, 800, 180);
             g.drawImage(image, 0, 0, null);
         }   
         
-        
+        // f the game is paused, display the correct screen
         if(bPause) {
             g.setColor(Color.black);
             g.setFont(new Font("TimesRoman", Font.BOLD, 60));
@@ -396,6 +407,7 @@ public class GameManager extends GameCore {
                     imaPausa.getWidth(null)/2,200, null);
         }
         
+        // if the player lost, display the restart image
         if(bLost) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Verdana", Font.BOLD, 40));
@@ -518,7 +530,7 @@ public class GameManager extends GameCore {
         //for our loading screen
         if(iLevel == 0 && iContTime < 50) {
             iContTime++;
-        }
+        } 
         else if(iLevel == 0){
             iContTime = 0;
             iLevel++;
@@ -534,6 +546,7 @@ public class GameManager extends GameCore {
             bImPlaying = false;
             bCanMoveL = false;
             bCanMoveR = false;
+            
             // get keyboard/mouse input
             checkInput(elapsedTime);
             //return;
@@ -550,7 +563,6 @@ public class GameManager extends GameCore {
             
             // update player
             updateCreature(player, elapsedTime);
-
             player.update(elapsedTime);
 
             // update other sprites
@@ -650,6 +662,7 @@ public class GameManager extends GameCore {
     */
     public void checkPlayerCollision(Player player, boolean canKill)
     {
+        // if the player is dead, just return
         if (!player.isAlive()) {
             return;
         }
