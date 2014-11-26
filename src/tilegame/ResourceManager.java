@@ -115,8 +115,13 @@ public class ResourceManager {
     public TileMap loadNextMap() {
         TileMap map = null;
         while (map == null) {
-            iCurrentMap ++ ;
+
+            iCurrentMap++ ;
+            
             try {
+                if(iCurrentMap > 3) {
+                    iCurrentMap = 1;
+                }
                 map = loadMap(
                     "/maps/map" + iCurrentMap + ".txt");
             }

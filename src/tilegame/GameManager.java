@@ -718,7 +718,6 @@ public class GameManager extends GameCore {
                 else {
                     map.removeSprite(powerUp);
                     iLevel = 1;
-                    resourceManager.setiCurrentMap(2);
                     iIngredientes = 4;
                 }
                 map = resourceManager.loadNextMap();
