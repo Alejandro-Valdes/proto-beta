@@ -37,6 +37,8 @@ public class ResourceManager {
     private Sprite sprSalsa;
     private Sprite sprQueso;
     private Sprite sprTortilla;
+    private Sprite sprLava;
+    private Sprite sprLava2;
     
     /**
         Creates a new ResourceManager with the specified
@@ -195,6 +197,14 @@ public class ResourceManager {
                 int tile = ch - 'A';
                 if (tile >= 0 && tile < arrLTiles.size()) {
                     newMap.setTile(x, y, (Image)arrLTiles.get(tile));
+                }
+                
+                //check for lava
+                else if(ch == 'x') {
+                    addSprite(newMap, sprLava, x,y);
+                }
+                else if(ch == 'z') {
+                    addSprite(newMap, sprLava2, x,y);
                 }
 
                 // check if the char represents a sprite
@@ -571,6 +581,13 @@ public class ResourceManager {
        
         //termina muerte gallina
         
+        //Sprites lava
+        Animation animLava = new Animation();
+        animLava.addFrame(loadImage("lava/Lava_04.png"), 300);
+        
+        Animation animLava2 = new Animation();
+        animLava2.addFrame(getMirrorImage(loadImage("lava/Lava_00.png")), 300);
+        
         // create creature sprites
         //en player es 1, 0 para que esten en orden correcto.
         sprPlayer = new Player(animPlayer[1], animPlayer[0],
@@ -585,6 +602,12 @@ public class ResourceManager {
         sprDuck1 = new Duck(animDuckStand, animDuckStand, animDuckStand,
                             animDuckStand, animDuckStand, animDuckStand,
                             animDuckStand);
+        sprLava = new Lava(animLava,animLava, animLava,animLava,
+                            animLava,animLava,animLava);
+        
+        sprLava2 = new Lava(animLava2,animLava2, animLava2,animLava2,
+                            animLava2,animLava2,animLava2);
+ 
     }
 
     /**

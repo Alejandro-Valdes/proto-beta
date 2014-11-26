@@ -691,6 +691,11 @@ public class GameManager extends GameCore {
         } else {
             bTutLabel = false; // apaga la boleana
         }
+        
+        //si choco con la lava me muero obviamente
+        if(collisionSprite instanceof Lava){
+            iLife = 0;
+        }
 
     }
 
