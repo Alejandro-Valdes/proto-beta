@@ -10,13 +10,14 @@
 #   *       Goal
 #   1       Gallinas
 #   2       Borregos
-                                
-
-
-                           !         2 o        
-                      IIIIIII      KLLLLLM             
-                                         .                 
-                                       KLLLM        2EF
-                 EF                                 EGD
-        EF  1    CD       1           2            EGAD   ,  * 2
-BBBBBBBBGHBBBBBBBGHBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBGAAHBBBBBBBBBBB
+                                                                 
+II                                                                                   IIIIIII
+II                                                                                   IIIIIII
+II                                                      .              1 +           IIIIIII
+II                     +            2+                  O           OKLLM            IIIIIII
+II                    KLLLLLLLLLLLLLLLM                2N    +1     N                IIIIIII
+II                        1   ! +2221                KLLLLLLLLL     KLLLLLL          IIIIIII          
+II                    KLLLLLLLLLLLLLLLLLLM   I                                       IIIIIII       
+II                      1    +  1 I212121   oI    I        OOO                       IIIIIII
+II    +        2      KLLLLLLLLLLLLLLLLLLLLLLMzxzxzxzxI  , NNN2    2  *   + 1    2  +IIIIIII        
+IIBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBIIIIIII

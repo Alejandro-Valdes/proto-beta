@@ -44,6 +44,12 @@ public class GameManager extends GameCore {
     private TileMapRenderer renderer;
 
     private static SoundClip scMusic;
+    private SoundClip scCheer;
+    private SoundClip scBoo;
+    private SoundClip scZombie;
+    private SoundClip scNotYet;
+    private SoundClip scCoin;
+    private SoundClip scGoal;
     
     private GameAction moveLeft;  //GmeAct to move
     private GameAction moveRight;
@@ -59,10 +65,11 @@ public class GameManager extends GameCore {
     private boolean bCanMoveR;  //can i move right
     private boolean bCanMoveL;  //can i move left
     private boolean bPause;     //am i paused
-    private boolean bMusicStart;
+    private boolean bImPlaying; //am i playing
     private boolean bTutLabel;  // player requests tutorial
     private boolean bLost;
     private int iLevel;     //which level am i in
+    private int iNumLevels;  //how many levels do we have
     private int iContTime;      //timer for loading
     private int iLife;      //life percentage
     private int iContVida;      //timer to know when to substract life
@@ -83,6 +90,14 @@ public class GameManager extends GameCore {
         scMusic = new SoundClip("/sounds/music.wav");
         scMusic.setLooping(true);
         
+        scCheer = new SoundClip("/sounds/cheer.wav");
+        scBoo = new SoundClip("/sounds/boo.wav");
+        scCoin = new SoundClip("/sounds/coin.wav");
+        scNotYet = new SoundClip("/sounds/notYet.wav");
+        scZombie = new SoundClip("/sounds/zombie.wav");
+        scGoal = new SoundClip("/sounds/goal.wav");
+                  
+        
         // start resource manager
         resourceManager = new ResourceManager(
         screen.getFullScreenWindow().getGraphicsConfiguration());
@@ -93,16 +108,16 @@ public class GameManager extends GameCore {
         imaPausa = resourceManager.loadImage("extras/PAUSA_white.png");
         //Level manegement
         iIngredientes = 4;
+        iNumLevels = 6;
         iLevel = 0;
         iContTime = 0;
         bTutLabel = false;
-        iLife = 10;
+        iLife = 100;
         iContVida = 0;
         iContAttack = 0;
         bAttack = false;
         bLost = false;
         iScore = 0;
-        bMusicStart = false;
         
         //Adds all my backgrounds
         renderer.addBackground(
@@ -118,10 +133,19 @@ public class GameManager extends GameCore {
             resourceManager.loadImage("backgrounds/level1.png")); //3
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/level2.png")); //4
+            resourceManager.loadImage("backgrounds/level2.jpg")); //4
         
         renderer.addBackground(
-            resourceManager.loadImage("backgrounds/YOULOSE.jpg")); //5
+            resourceManager.loadImage("backgrounds/level3.jpg")); //5
+        
+        renderer.addBackground(
+            resourceManager.loadImage("backgrounds/level4.png"));//6 last level
+        
+        renderer.addBackground(
+            resourceManager.loadImage("backgrounds/YOULOSE.jpg")); //7 
+        
+        renderer.addBackground(
+            resourceManager.loadImage("backgrounds/YOUWIN.jpg")); //8
         
         renderer.setBackground(iLevel);
 
@@ -147,6 +171,7 @@ public class GameManager extends GameCore {
         bCanMoveL = false;
         //not pause
         bPause = false;
+        bImPlaying = false;
         //Creation of all the game actions
         moveLeft = new GameAction("moveLeft");
         moveRight = new GameAction("moveRight");
@@ -209,6 +234,7 @@ public class GameManager extends GameCore {
         if(restart.isPressed() && bLost) {
             //UN TIPO DE INIT()
             //Level manegement
+            scMusic.play();
             iIngredientes = 4;
             iLevel = 3;
             iContTime = 0;
@@ -224,9 +250,10 @@ public class GameManager extends GameCore {
             //not pause
             bPause = false;
             renderer.setBackground(iLevel);
-            resourceManager.setiCurrentMap(1);
+            resourceManager.setiCurrentMap(1); 
+            //cargo el uno y cargo el siguiente
             map = resourceManager.loadNextMap();
-
+            bImPlaying = true;
             restart.reset();            
         }
 
@@ -234,8 +261,9 @@ public class GameManager extends GameCore {
             bCanMoveL =true;
             bCanMoveR = true;
             iLevel++;
+            bImPlaying = true;
             scMusic.play();
-            renderer.setBackground(iLevel);     //chance background   
+            renderer.setBackground(iLevel);     //tutorial background   
         }
 
         //Moves the player around
@@ -255,7 +283,7 @@ public class GameManager extends GameCore {
                 }
             }
 
-            if (pause.isPressed()) {
+            if (pause.isPressed() && bImPlaying) {
                 bPause = true;
                 pause.reset();
             }
@@ -298,7 +326,7 @@ public class GameManager extends GameCore {
     public void draw(Graphics2D g) {        
         renderer.draw(g, map,
             screen.getWidth(), screen.getHeight());
-        
+
         if(iLevel > 1 && !bLost) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Verdana", Font.BOLD, 40));
@@ -326,7 +354,7 @@ public class GameManager extends GameCore {
             
             // declarando imagen inicial
             Image image = resourceManager.loadImage("extras/pato_agarrachilaquiles.png");
-            g.drawString("X: " + player.getX(), 300, 400);
+            //g.drawString("X: " + player.getX(), 300, 400);
             // checando en que posicion del mapa tutorial esta el personaje para saber
             // que consejo del pato desplegar
             if (player.getX() > 3400) {
@@ -490,14 +518,17 @@ public class GameManager extends GameCore {
         // player is dead! start map over
         if (player.getState() == Creature.I_STATE_DEAD) {
             //map = resourceManager.reloadMap();
-            iLevel = 5;  //El You lose
+            iLevel = 7;  //El You lose
             renderer.setBackground(iLevel);
             bLost = true;
+            bImPlaying = false;
+            bCanMoveL = false;
+            bCanMoveR = false;
             // get keyboard/mouse input
             checkInput(elapsedTime);
             //return;
         }
-        
+
         if(bPause) {
             checkSystemInput(elapsedTime);
         }
@@ -628,6 +659,7 @@ public class GameManager extends GameCore {
 
                 }
                 badguy.setState(Minion.I_STATE_DYING);
+                scZombie.play();
                 bCanMoveR = true;
                 bCanMoveL = true;
                 iScore+=5;
@@ -640,11 +672,13 @@ public class GameManager extends GameCore {
             }
             else{
                 iContVida = 0;
-                iLife -= 5;
+                iLife -= 20;
             }
             //im dead
             if(iLife <= 0) {
                 player.setState(Minion.I_STATE_DYING);
+                scMusic.stop();
+                scBoo.play();
             }
             
             //if player can attack;
@@ -713,14 +747,19 @@ public class GameManager extends GameCore {
         if (powerUp instanceof PowerUp.Goal) {
             // advance to next map
             if(iIngredientes ==0) {
-                if(iLevel < 4){
+                if(iLevel < iNumLevels){
+                    scNotYet.play();
                     iLevel++;
                     iIngredientes = 4;  //necesito otros 4 ingredientes otra vez
                 }
                 else {
-                    map.removeSprite(powerUp);
-                    iLevel = 1;
-                    iIngredientes = 4;
+                    scCheer.play();
+                    iLevel = 8;  //El You win
+                    renderer.setBackground(iLevel);
+                    bLost = true;
+                    bImPlaying = false;
+                    bCanMoveL = false;
+                    bCanMoveR = false;
                 }
                 map = resourceManager.loadNextMap();
                 renderer.setBackground(iLevel);
@@ -728,11 +767,13 @@ public class GameManager extends GameCore {
         }
         else if (powerUp instanceof PowerUp.Coin) {
             iScore+=10;
+            scCoin.play();
             map.removeSprite(powerUp);
         }
         else { 
             iIngredientes--;
             map.removeSprite(powerUp);
+            scGoal.play();
         }
             
     }

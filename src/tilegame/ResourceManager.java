@@ -122,7 +122,7 @@ public class ResourceManager {
             iCurrentMap++ ;
             
             try {
-                if(iCurrentMap > 3) {
+                if(iCurrentMap > 5) {
                     iCurrentMap = 1;
                 }
                 map = loadMap(
@@ -587,10 +587,18 @@ public class ResourceManager {
         
         //Sprites lava
         Animation animLava = new Animation();
-        animLava.addFrame(loadImage("lava/Lava_04.png"), 300);
+        animLava.addFrame(loadImage("lava/Lava_00.png"), 300);
+        /*animLava.addFrame(loadImage("lava/Lava_01.png"), 300);
+        animLava.addFrame(loadImage("lava/Lava_02.png"), 300);
+        animLava.addFrame(loadImage("lava/Lava_03.png"), 300);
+        animLava.addFrame(loadImage("lava/Lava_04.png"), 300);*/
         
         Animation animLava2 = new Animation();
         animLava2.addFrame(getMirrorImage(loadImage("lava/Lava_00.png")), 300);
+        /*animLava2.addFrame(getMirrorImage(loadImage("lava/Lava_01.png")), 300);
+        animLava2.addFrame(getMirrorImage(loadImage("lava/Lava_02.png")), 300);
+        animLava2.addFrame(getMirrorImage(loadImage("lava/Lava_03.png")), 300);
+        animLava2.addFrame(getMirrorImage(loadImage("lava/Lava_04.png")), 300);*/
         
         // create creature sprites
         //en player es 1, 0 para que esten en orden correcto.
