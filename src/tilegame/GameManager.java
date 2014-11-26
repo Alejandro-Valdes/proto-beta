@@ -286,7 +286,7 @@ public class GameManager extends GameCore {
      * draws basic info on the screen
      * @param g 
      */
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g) {        
         renderer.draw(g, map,
             screen.getWidth(), screen.getHeight());
         
@@ -328,17 +328,25 @@ public class GameManager extends GameCore {
             
             // declarando imagen inicial
             Image image = resourceManager.loadImage("extras/pato_agarrachilaquiles.png");
-            
+            g.drawString("X: " + player.getX(), 300, 400);
             // checando en que posicion del mapa tutorial esta el personaje para saber
             // que consejo del pato desplegar
-            if (player.getX() > 3200) {
+            if (player.getX() > 3400) {
                 image = resourceManager.loadImage("extras/pato_agarrachilaquiles.png");
-            } else if (player.getX() > 1700) {
-                image = resourceManager.loadImage("extras/pato_enemigosmasgrandes.png");
-            } else if (player.getX() > 900) {
+            } else if (player.getX() > 2500) {
+                image = resourceManager.loadImage("Props/pato_juntaingredientes.png");
+            } else if (player.getX() > 1400) {
+                image = resourceManager.loadImage("Props/pato_enemigosmasgrandes.png");
+            } else if (player.getX() > 1000) {
                 image = resourceManager.loadImage("extras/pato_instrucciones_02.png");
-            } else {
+            }  else if (player.getX() > 770) {
                 image = resourceManager.loadImage("extras/pato_instrucciones_01.png");
+            } else if (player.getX() > 550) {
+                image = resourceManager.loadImage("Props/pato_historia03.png");
+            } else if (player.getX() > 350) {
+                image = resourceManager.loadImage("Props/pato_historia02.png");
+            } else if (player.getX() > 0) {
+                image = resourceManager.loadImage("Props/pato_historia01.png");
             }
             
             // pinta la imagen en un rectangulo de su tamaño
