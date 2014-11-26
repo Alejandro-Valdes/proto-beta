@@ -15,9 +15,9 @@ II                                                                              
 II                                                                                   IIIIIII
 II                                                      .              1 +           IIIIIII
 II                     +            2+                  O           OKLLM            IIIIIII
-II                    KLLLLLLLLLLLLLLLM                2N    +1     N                IIIIIII
+II                    KLLLLLLLLLLLLLLLM                2N    +1     N*               IIIIIII
 II                        1   ! +2221                KLLLLLLLLL     KLLLLLL          IIIIIII          
 II                    KLLLLLLLLLLLLLLLLLLM   I                                       IIIIIII       
-II                      1    +  1 I212121   oI    I        OOO                       IIIIIII
-II    +        2      KLLLLLLLLLLLLLLLLLLLLLLMzxzxzxzxI  , NNN2    2  *   + 1    2  +IIIIIII        
+II                      1    +  1 Io212121   I    I        OOO                       IIIIIII
+II    +        2      KLLLLLLLLLLLLLLLLLLLLLLMzxzxzxzxI  , NNN2    2      + 1    2  +IIIIIII        
 IIBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBIIIIIII
