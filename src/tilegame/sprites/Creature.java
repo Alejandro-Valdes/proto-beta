@@ -133,7 +133,6 @@ public abstract class Creature extends Sprite {
         }
     }
 
-
     /**
         Gets the state of this Creature. The state is either
         STATE_NORMAL, STATE_DYING, or STATE_DEAD.
