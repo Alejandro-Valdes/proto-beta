@@ -5,7 +5,7 @@
 #   A..Z    Tiles A through Z
 #   o       Frijol
 #   !       Salsa
-#   ,	      Tortilla
+#   ,	    Tortilla
 #   .       Queso
 #   *       Goal
 #   1       Gallinas
